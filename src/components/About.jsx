@@ -33,7 +33,7 @@ export default function About() {
                             whileHover={{ scale: 1.05 }}
                             className="relative w-60 h-60 rounded-full border border-[#80ffd4]/40 overflow-hidden shadow-[0_0_40px_rgba(128,255,212,0.2)]">
                             <img
-                                src="/src/assets/profile.png"
+                                src="/img/profile.png"
                                 alt="Muhamad Jaelani"
                                 className="w-full h-full object-cover"
                             />
