@@ -53,7 +53,7 @@ export default function Hero() {
     }, []);
 
     return (
-        <section className="relative flex flex-col justify-center items-center text-center pt-36 pb-28 overflow-hidden bg-[#0b0b10]">
+        <section className="relative flex flex-col justify-center items-center text-center pt-[15%] pb-28 overflow-hidden bg-[#0b0b10]">
             <canvas ref={canvasRef} className="absolute inset-0 z-0" />
             <div className="absolute inset-0 bg-linear-to-b from-transparent to-[#0b0b10]" />
 

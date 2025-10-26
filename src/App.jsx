@@ -30,8 +30,6 @@ export default function App() {
       <Hero />
       <About />
       <Skills />
-      <Projects />
-      <Education />
 
       <section className="relative z-10 grid md:grid-cols-3 gap-8 px-10 py-28 max-w-6xl mx-auto">
         {[
