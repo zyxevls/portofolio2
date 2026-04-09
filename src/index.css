@@ -1,16 +1,55 @@
 @import "tailwindcss";
 
 @theme {
-  --color-cyber-pink: #ff00ff;
-  --color-cyber-blue: #00e5ff;
-  --color-cyber-purple: #8b00ff;
-  --color-cyber-neon: #39ff14;
-  --color-cyber-dark: #050510;
-  --font-poppins: "Poppins", sans-serif;
-  --shadow-neon: 0 0 10px var(--color-cyber-blue), 0 0 25px var(--color-cyber-pink);
+  --color-background: #050816;
+  --color-foreground: #eff4ff;
+  --color-card: #0d1424;
+  --color-card-foreground: #eff4ff;
+  --color-popover: #0d1424;
+  --color-popover-foreground: #eff4ff;
+  --color-primary: #7ee7ff;
+  --color-primary-foreground: #05101c;
+  --color-secondary: #172033;
+  --color-secondary-foreground: #eff4ff;
+  --color-muted: #10182a;
+  --color-muted-foreground: #9aa9c5;
+  --color-accent: #1c2940;
+  --color-accent-foreground: #eff4ff;
+  --color-destructive: #ef4444;
+  --color-border: rgba(148, 163, 184, 0.18);
+  --color-input: rgba(148, 163, 184, 0.24);
+  --color-ring: #7ee7ff;
+  --font-sans: "Plus Jakarta Sans", sans-serif;
+  --font-display: "Space Grotesk", sans-serif;
 }
 
-body {
-  @apply bg-cyber-dark text-cyber-blue font-poppins min-h-screen;
-  background-image: radial-gradient(circle at 20% 20%, #0ff2ff15, #000);
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply min-h-screen bg-background text-foreground font-sans antialiased;
+    background-image:
+      radial-gradient(circle at top left, rgba(126, 231, 255, 0.12), transparent 30%),
+      radial-gradient(circle at 80% 0%, rgba(129, 140, 248, 0.16), transparent 24%),
+      linear-gradient(180deg, #050816 0%, #070d19 45%, #050816 100%);
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-display;
+  }
+
+  ::selection {
+    @apply bg-primary text-primary-foreground;
+  }
 }
