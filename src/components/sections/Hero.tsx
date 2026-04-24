@@ -5,6 +5,7 @@ import { Card } from "@/components/ui/card";
 import { portfolioContent } from "@/data/portfolio-content";
 import { Stats } from "./Stats";
 import { FileText, Github, Linkedin } from "lucide-react";
+import profileImage from "@/assets/me.webp";
 
 const containerVariants: Variants = {
   hidden: { opacity: 0 },
@@ -90,7 +91,7 @@ export function Hero({ startStatsCount }: HeroProps) {
 
             <motion.h1
               variants={itemVariants}
-              className="text-balance font-display text-4xl leading-[1] md:text-6xl lg:text-7xl font-black tracking-tighter text-foreground mb-8"
+              className="text-balance font-display text-4xl leading-none md:text-6xl lg:text-7xl font-black tracking-tighter text-foreground mb-8"
             >
               {content.tagline.split(" ").map((word, i) => (
                 <span key={i} className={word.includes("Jaelani") ? "text-primary italic font-serif" : ""}>
@@ -173,7 +174,7 @@ export function Hero({ startStatsCount }: HeroProps) {
               >
                 <div className="w-full h-full relative overflow-hidden">
                   <motion.img
-                    src="/src/assets/me.webp"
+                    src={profileImage}
                     alt="Muhamad Jaelani"
                     className="h-full w-full object-cover grayscale transition-[filter] duration-700 ease-in-out group-hover:grayscale-0"
                     loading="eager"
