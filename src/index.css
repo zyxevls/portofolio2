@@ -1,39 +1,152 @@
+@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sora:wght@500;600;700&display=swap");
 @import "tailwindcss";
 
 @theme {
-  --color-background: #050816;
-  --color-foreground: #eff4ff;
-  --color-card: #0d1424;
-  --color-card-foreground: #eff4ff;
-  --color-popover: #0d1424;
-  --color-popover-foreground: #eff4ff;
-  --color-primary: #7ee7ff;
-  --color-primary-foreground: #05101c;
-  --color-secondary: #172033;
-  --color-secondary-foreground: #eff4ff;
-  --color-muted: #10182a;
-  --color-muted-foreground: #9aa9c5;
-  --color-accent: #1c2940;
-  --color-accent-foreground: #eff4ff;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
   --color-destructive: #ef4444;
-  --color-border: rgba(148, 163, 184, 0.18);
-  --color-input: rgba(148, 163, 184, 0.24);
-  --color-ring: #7ee7ff;
-  --font-sans: "Plus Jakarta Sans", sans-serif;
-  --font-display: "Space Grotesk", sans-serif;
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --font-sans: "Manrope", sans-serif;
+  --font-display: "Sora", sans-serif;
+}
+
+:root {
+  --theme-x: 50vw;
+  --theme-y: 50vh;
+  --theme-end-radius: 150vmax;
+  --background: #fdfdfc;
+  --foreground: #0f172a;
+  --card: #ffffff;
+  --card-foreground: #0f172a;
+  --popover: #ffffff;
+  --popover-foreground: #0f172a;
+  --primary: #0d9488;
+  --primary-foreground: #f0fdfa;
+  --secondary: #f1f5f9;
+  --secondary-foreground: #1e293b;
+  --muted: #f8fafc;
+  --muted-foreground: #64748b;
+  --accent: #f1f5f9;
+  --accent-foreground: #0f172a;
+  --border: #e2e8f0;
+  --input: #e2e8f0;
+  --ring: #0d9488;
+  --hover-text: #020617;
+}
+
+@supports (view-transition-name: root) {
+  ::view-transition-group(root) {
+    animation-duration: 1ms;
+  }
+
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+    mix-blend-mode: normal;
+  }
+
+  ::view-transition-new(root) {
+    clip-path: circle(0 at var(--theme-x) var(--theme-y));
+    animation: theme-circle-reveal 560ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+}
+
+@keyframes theme-circle-reveal {
+  to {
+    clip-path: circle(var(--theme-end-radius) at var(--theme-x) var(--theme-y));
+  }
+}
+
+.dark {
+  --background: #091018;
+  --foreground: #e7eef8;
+  --card: #111c2a;
+  --card-foreground: #e7eef8;
+  --popover: #111c2a;
+  --popover-foreground: #e7eef8;
+  --primary: #2dd4bf;
+  --primary-foreground: #062723;
+  --secondary: #1e2a3b;
+  --secondary-foreground: #d9e5f7;
+  --muted: #172332;
+  --muted-foreground: #95a8c5;
+  --accent: #1b3d57;
+  --accent-foreground: #d6e9ff;
+  --border: rgba(143, 163, 191, 0.28);
+  --input: rgba(143, 163, 191, 0.35);
+  --ring: #2dd4bf;
+  --hover-text: #ffffff;
 }
 
 @layer base {
   html {
     scroll-behavior: smooth;
+    overflow-x: hidden;
   }
 
   body {
     @apply min-h-screen bg-background text-foreground font-sans antialiased;
     background-image:
-      radial-gradient(circle at top left, rgba(126, 231, 255, 0.12), transparent 30%),
-      radial-gradient(circle at 80% 0%, rgba(129, 140, 248, 0.16), transparent 24%),
-      linear-gradient(180deg, #050816 0%, #070d19 45%, #050816 100%);
+      radial-gradient(circle at 10% 8%, rgba(249, 115, 22, 0.14), transparent 34%),
+      radial-gradient(circle at 84% 0%, rgba(15, 118, 110, 0.16), transparent 30%),
+      linear-gradient(180deg, #f9faf6 0%, #eff4ef 46%, #ebf2f0 100%);
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.035;
+    pointer-events: none;
+    z-index: 99;
+    background-image: url("https://grainy-gradients.vercel.app/noise.svg");
+    filter: contrast(120%) brightness(100%);
+  }
+
+  /* Modern Scrollbar */
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 5px;
+    border: 3px solid transparent;
+    background-clip: content-box;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: var(--muted-foreground);
+  }
+
+  .dark body {
+    background-image:
+      radial-gradient(circle at 10% 5%, rgba(45, 212, 191, 0.12), transparent 36%),
+      radial-gradient(circle at 84% 0%, rgba(56, 189, 248, 0.14), transparent 32%),
+      linear-gradient(180deg, #071018 0%, #091423 52%, #0a1827 100%);
   }
 
   * {
@@ -51,5 +164,140 @@
 
   ::selection {
     @apply bg-primary text-primary-foreground;
+  }
+
+  html.theme-switching body,
+  html.theme-switching .lux-card,
+  html.theme-switching button,
+  html.theme-switching a,
+  html.theme-switching input,
+  html.theme-switching textarea,
+  html.theme-switching [class*="bg-"],
+  html.theme-switching [class*="text-"] {
+    transition:
+      background-color 360ms ease,
+      border-color 360ms ease,
+      color 360ms ease,
+      fill 360ms ease,
+      stroke 360ms ease,
+      box-shadow 360ms ease,
+      opacity 360ms ease;
+  }
+
+  html.theme-switching-mobile body,
+  html.theme-switching-mobile .lux-card,
+  html.theme-switching-mobile button {
+    transition:
+      background-color 220ms ease,
+      border-color 220ms ease,
+      color 220ms ease;
+  }
+}
+
+@layer components {
+  .lux-card {
+    --mx: 50%;
+    --my: 50%;
+    position: relative;
+    overflow: hidden;
+    transition:
+      transform 320ms cubic-bezier(0.22, 1, 0.36, 1),
+      box-shadow 320ms cubic-bezier(0.22, 1, 0.36, 1),
+      border-color 320ms ease;
+  }
+
+  .lux-card::before {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    background:
+      radial-gradient(220px circle at var(--mx) var(--my), rgba(45, 212, 191, 0.19), transparent 56%),
+      radial-gradient(220px circle at calc(var(--mx) - 10%) calc(var(--my) + 8%), rgba(249, 115, 22, 0.15), transparent 62%);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 260ms ease, background-position 160ms ease-out;
+    z-index: 0;
+  }
+
+  .lux-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    border: 1px solid transparent;
+    pointer-events: none;
+    transition: border-color 260ms ease;
+    z-index: 1;
+  }
+
+  .lux-card:hover {
+    transform: translateY(-7px);
+    box-shadow:
+      0 20px 45px rgba(2, 10, 22, 0.16),
+      0 8px 18px rgba(15, 118, 110, 0.14),
+      0 0 20px rgba(45, 212, 191, 0.2);
+    border-color: rgba(45, 212, 191, 0.46);
+  }
+
+  .dark .lux-card:hover {
+    box-shadow:
+      0 24px 52px rgba(0, 0, 0, 0.48),
+      0 10px 24px rgba(56, 189, 248, 0.2),
+      0 0 30px rgba(45, 212, 191, 0.15);
+    border-color: rgba(103, 232, 249, 0.5);
+  }
+
+  .lux-card:hover::before {
+    opacity: 1;
+  }
+
+  .lux-card:focus-within::before {
+    opacity: 1;
+  }
+
+  .lux-card:hover::after {
+    border-color: rgba(56, 189, 248, 0.28);
+  }
+
+  .lux-card > * {
+    position: relative;
+    z-index: 2;
+  }
+
+  input:focus,
+  textarea:focus {
+    box-shadow: 0 0 20px rgba(45, 212, 191, 0.3) inset, 0 0 20px rgba(45, 212, 191, 0.15);
+  }
+
+  .dark input:focus,
+  .dark textarea:focus {
+    box-shadow: 0 0 20px rgba(45, 212, 191, 0.25) inset, 0 0 20px rgba(45, 212, 191, 0.2);
+  }
+
+  @keyframes float-subtle {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-6px); }
+  }
+
+  .animate-float {
+    animation: float-subtle 3.5s ease-in-out infinite;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .lux-card {
+    transition: none;
+  }
+
+  .lux-card::before {
+    display: none;
+  }
+
+  .lux-card:hover {
+    transform: none;
   }
 }

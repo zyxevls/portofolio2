@@ -1,5 +1,6 @@
 import type { LucideIcon } from "lucide-react";
-import {
+import
+{
   ArrowRight,
   Blocks,
   BriefcaseBusiness,
@@ -15,23 +16,27 @@ import {
   TabletSmartphone,
 } from "lucide-react";
 
-export interface NavLink {
+export interface NavLink
+{
   label: string;
   href: string;
 }
 
-export interface HeroStat {
+export interface HeroStat
+{
   value: string;
   label: string;
 }
 
-export interface FeatureCardData {
+export interface FeatureCardData
+{
   title: string;
   description: string;
   icon: LucideIcon;
 }
 
-export interface Project {
+export interface Project
+{
   title: string;
   description: string;
   image: string;
@@ -41,13 +46,15 @@ export interface Project {
   tags: string[];
 }
 
-export interface SkillGroup {
+export interface SkillGroup
+{
   name: string;
   description: string;
   items: string[];
 }
 
-export interface EducationEntry {
+export interface EducationEntry
+{
   school: string;
   program: string;
   year: string;
@@ -55,7 +62,8 @@ export interface EducationEntry {
   logo: string;
 }
 
-export interface SocialLink {
+export interface SocialLink
+{
   label: string;
   href: string;
   icon: LucideIcon;
@@ -72,11 +80,16 @@ export const navigationLinks: NavLink[] = [
 
 export const heroStats: HeroStat[] = [
   { value: "10+", label: "Interfaces shipped" },
-  { value: "4", label: "Core disciplines" },
+  { value: "1", label: "Interactive 3D character scene" },
   { value: "100%", label: "Responsive focus" },
 ];
 
 export const featureCards: FeatureCardData[] = [
+  {
+    title: "3D Character Integration",
+    description: "Animated character pipeline built with React Three Fiber and glTF assets from established open libraries.",
+    icon: Sparkles,
+  },
   {
     title: "Composable UI",
     description: "Reusable primitives keep the portfolio consistent, maintainable, and fast to extend.",
@@ -96,13 +109,13 @@ export const featureCards: FeatureCardData[] = [
 
 export const projects: Project[] = [
   {
-    title: "Portfolio Website",
-    description: "A polished personal portfolio with motion, responsive layout, and modern UI primitives.",
-    image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1200",
-    href: "#contact",
+    title: "SMKN 1 Rangkasbitung",
+    description: "A modern redesign of the school website, focused on clear information architecture and responsive design.",
+    image: "/img/web-smkn1rks-home.webp",
+    href: "https://smkn1rangkasbitung.sch.id/",
     category: "Frontend",
-    year: "2026",
-    tags: ["React", "TypeScript", "ShadCN"],
+    year: "2025",
+    tags: ["Wordpress", "HTML", "CSS", "JavaScript"],
   },
   {
     title: "Supabase Gallery",
