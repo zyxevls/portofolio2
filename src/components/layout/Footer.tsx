@@ -5,14 +5,16 @@ import { useTheme } from "next-themes";
 import logoDark from "@/assets/logo-dark.png";
 import logoLight from "@/assets/logo-light.png";
 
-export function Footer() {
+export function Footer()
+{
   const { nav, contactLinks } = portfolioContent;
   const { resolvedTheme } = useTheme();
   const currentYear = new Date().getFullYear();
 
   const logoSrc = resolvedTheme === "dark" ? logoLight : logoDark;
 
-  const scrollToTop = () => {
+  const scrollToTop = () =>
+  {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
@@ -32,7 +34,6 @@ export function Footer() {
       <div className="container mx-auto px-6 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
 
-          {/* Column 1: Brand & Status */}
           <div className="space-y-6">
             <div className="flex items-center gap-3 flex-wrap">
               <img src={logoSrc} alt="Logo" className="h-8 w-auto" />
@@ -46,7 +47,6 @@ export function Footer() {
             </p>
           </div>
 
-          {/* Column 2: Navigation */}
           <div className="space-y-4">
             <h4 className="text-foreground dark:text-white text-[10px] font-bold uppercase tracking-[0.2em]">Menu</h4>
             <ul className="grid grid-cols-2 lg:grid-cols-1 gap-3">
@@ -63,11 +63,11 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Column 3: Socials */}
           <div className="space-y-4">
             <h4 className="text-foreground dark:text-white text-[10px] font-bold uppercase tracking-[0.2em]">Connect</h4>
             <div className="flex gap-4">
-              {contactLinks.map((link) => {
+              {contactLinks.map((link) =>
+              {
                 const Icon = socialIcons[link.icon] || Mail;
                 return (
                   <a
@@ -85,7 +85,6 @@ export function Footer() {
             </div>
           </div>
 
-          {/* Column 4: Newsletter/Direct */}
           <div className="space-y-4">
             <h4 className="text-foreground dark:text-white text-[10px] font-bold uppercase tracking-[0.2em]">Quick Contact</h4>
             <a href="mailto:jaelanim465@gmail.com" className="block text-sm font-bold text-muted-foreground hover:text-foreground dark:hover:text-white transition-colors truncate">

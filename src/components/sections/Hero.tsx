@@ -137,9 +137,9 @@ export function Hero({ startStatsCount }: HeroProps) {
 
             <motion.div variants={itemVariants} className="flex flex-wrap items-center justify-center md:justify-start gap-2 max-w-md">
               {[
-                "Fast turnaround",
-                "Motion-rich UI",
-                "Mobile-first polish"
+                "Full-Stack Precision",
+                "Type-Safe Development",
+                "Performance-First UX"
               ].map((chip) => (
                 <Badge
                   key={chip}
