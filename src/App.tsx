@@ -1,23 +1,23 @@
 import { useEffect, useState, Suspense, lazy } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { portfolioContent } from "@/data/portfolio-content";
-import { ThemeToggle } from "@/components/theme-toggle";
-import { Separator } from "@/components/ui/separator";
 
-// Layout & Components
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { CustomCursor } from "@/components/shared/CustomCursor";
+
+import { Separator } from "@/components/ui/separator";
+import { ThemeToggle } from "@/components/theme-toggle";
+
 import logoDark from "@/assets/logo-dark.png";
 
 // Lazy load sections for better performance
 const Hero = lazy(() => import("@/components/sections/Hero").then(m => ({ default: m.Hero })));
 const TechStack = lazy(() => import("@/components/sections/TechStack").then(m => ({ default: m.TechStack })));
-const Stats = lazy(() => import("@/components/sections/Stats").then(m => ({ default: m.Stats })));
 const Services = lazy(() => import("@/components/sections/Services").then(m => ({ default: m.Services })));
 const Workflow = lazy(() => import("@/components/sections/Workflow").then(m => ({ default: m.Workflow })));
 const Testimonials = lazy(() => import("@/components/sections/Testimonials").then(m => ({ default: m.Testimonials })));
 const Projects = lazy(() => import("@/components/sections/Projects").then(m => ({ default: m.Projects })));
+const Stats = lazy(() => import("@/components/sections/Stats").then(m => ({ default: m.Stats })));
 const CallToAction = lazy(() => import("@/components/sections/CallToAction").then(m => ({ default: m.CallToAction })));
 const Contact = lazy(() => import("@/components/sections/Contact").then(m => ({ default: m.Contact })));
 
