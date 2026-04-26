@@ -60,7 +60,7 @@ export function Services() {
           </div>
         </div>
 
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {content.services.map((service, index) => {
             const Icon = iconMap[service.icon];
 
@@ -69,47 +69,43 @@ export function Services() {
                 key={service.title}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-100px" }}
-                transition={{ duration: 0.5, delay: index * 0.05 }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ duration: 0.6, delay: index * 0.1, ease: [0.22, 1, 0.36, 1] }}
                 onMouseMove={handleMouseMove}
-                className="group relative"
+                className="group h-full"
               >
-                <div className="absolute -inset-px rounded-3xl bg-linear-to-r from-primary/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-[1px]" />
-
-                <Card
-                  className="relative h-full overflow-hidden rounded-[23px] border border-border/40 bg-background/30 p-7 backdrop-blur-md transition-all duration-500 hover:border-primary/40 hover:shadow-xl hover:shadow-primary/5"
+                <div
+                  className="flex flex-col h-full rounded-4xl border border-border/40 bg-card/40 p-8 backdrop-blur-xl"
                 >
-                  <div
-                    className="pointer-events-none absolute -inset-px opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-[radial-gradient(300px_circle_at_var(--x)_var(--y),rgba(45,212,191,0.06),transparent_80%)]"
-                  />
-
-                  <div className="relative z-10 flex h-full flex-col justify-between space-y-6">
-                    <div className="flex items-start justify-between">
-                      <div className="relative flex h-12 w-12 items-center justify-center rounded-xl bg-secondary/40 border border-border/40 text-primary group-hover:bg-primary group-hover:text-primary-foreground group-hover:border-primary transition-all duration-500 transform group-hover:scale-105 shadow-md">
-                        <Icon className="size-5" />
+                  <div className="relative z-10 flex h-full flex-col justify-between">
+                    <div>
+                      <div className="flex items-center justify-between mb-8">
+                        <div className="relative flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10 border border-primary/20 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-500 shadow-sm">
+                          <Icon className="size-6" />
+                        </div>
+                        <span className="text-5xl font-black text-foreground/5 dark:text-white/5 select-none tracking-tighter">
+                          {(index + 1).toString().padStart(2, '0')}
+                        </span>
                       </div>
-                      <span className="text-4xl font-black text-foreground/8 dark:text-white/5 select-none transition-colors group-hover:text-primary/10">
-                        {index + 1}
-                      </span>
+
+                      <div className="space-y-4">
+                        <h3 className="text-2xl font-bold tracking-tight text-foreground group-hover:text-primary transition-colors duration-300">
+                          {service.title}
+                        </h3>
+                        <p className="text-sm leading-relaxed text-slate-600 dark:text-muted-foreground group-hover:text-foreground dark:group-hover:text-white/80 transition-colors duration-300">
+                          {service.description}
+                        </p>
+                      </div>
                     </div>
 
-                    <div className="space-y-2">
-                      <h3 className="text-xl font-bold tracking-tight text-foreground group-hover:text-primary transition-colors duration-300">
-                        {service.title}
-                      </h3>
-                      <p className="text-xs md:text-sm leading-relaxed text-slate-600 dark:text-muted-foreground group-hover:text-foreground dark:group-hover:text-white transition-colors duration-300">
-                        {service.description}
-                      </p>
-                    </div>
-
-                    <div className="pt-1">
-                      <div className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.15em] text-primary group-hover:gap-3 transition-all duration-300">
-                        Explore
-                        <div className="h-px w-4 bg-primary group-hover:w-8 transition-all duration-300" />
+                    <div className="pt-8">
+                      <div className="inline-flex items-center gap-3 text-[11px] font-bold uppercase tracking-[0.2em] text-primary group-hover:gap-5 transition-all duration-300 cursor-pointer">
+                        Learn More
+                        <div className="h-px w-6 bg-primary group-hover:w-10 transition-all duration-300" />
                       </div>
                     </div>
                   </div>
-                </Card>
+                </div>
               </motion.div>
             );
           })}

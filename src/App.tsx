@@ -11,7 +11,7 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import logoDark from "@/assets/logo-dark.png";
 
 // Lazy load sections for better performance
-const Hero = lazy(() => import("@/components/sections/Hero").then(m => ({ default: m.Hero })));
+import { Hero } from "@/components/sections/Hero";
 const TechStack = lazy(() => import("@/components/sections/TechStack").then(m => ({ default: m.TechStack })));
 const Services = lazy(() => import("@/components/sections/Services").then(m => ({ default: m.Services })));
 const Workflow = lazy(() => import("@/components/sections/Workflow").then(m => ({ default: m.Workflow })));
@@ -29,7 +29,7 @@ export default function App() {
     useEffect(() => {
         const timer = window.setTimeout(() => {
             setShowIntroLoader(false);
-        }, 1700);
+        }, 800);
         return () => window.clearTimeout(timer);
     }, []);
 
@@ -49,14 +49,8 @@ export default function App() {
     }, []);
 
     return (
-        <div className="bg-background text-foreground">
+        <div className="bg-background text-foreground selection:bg-primary selection:text-primary-foreground">
             <CustomCursor />
-            <motion.div
-                aria-hidden="true"
-                animate={{ opacity: [0.55, 0.85, 0.55], scale: [1, 1.02, 1] }}
-                transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
-                className="pointer-events-none fixed inset-0 z-0 opacity-80 [background:radial-gradient(circle_at_15%_20%,rgba(249,115,22,0.16),transparent_28%),radial-gradient(circle_at_78%_0%,rgba(15,118,110,0.2),transparent_30%),radial-gradient(circle_at_80%_70%,rgba(37,99,235,0.14),transparent_32%)]"
-            />
 
             <AnimatePresence>
                 {showIntroLoader && (

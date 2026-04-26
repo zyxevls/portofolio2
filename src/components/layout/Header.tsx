@@ -86,20 +86,26 @@ export function Header({ isScrolled }: HeaderProps) {
       <AnimatePresence>
         {isMenuOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            className="mx-auto mt-2 max-w-6xl rounded-2xl border border-border/70 bg-background/95 px-6 py-4 shadow-xl shadow-slate-950/12 backdrop-blur-xl md:hidden"
+            initial={{ opacity: 0, scale: 0.95, y: -20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: -20 }}
+            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+            className="absolute inset-x-6 top-20 z-50 rounded-4xl border border-border/60 bg-background/90 p-8 shadow-2xl shadow-slate-950/20 backdrop-blur-2xl md:hidden"
           >
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-4">
+              <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-muted-foreground mb-2">Navigation</p>
               {content.nav.map((item) => (
-                <Button key={item.href} variant="ghost" className="justify-start" asChild>
-                  <a href={item.href} onClick={() => setIsMenuOpen(false)}>
-                    {item.label}
-                  </a>
-                </Button>
+                <a 
+                  key={item.href} 
+                  href={item.href} 
+                  onClick={() => setIsMenuOpen(false)}
+                  className="text-2xl font-bold tracking-tight text-foreground transition-colors hover:text-primary active:scale-95"
+                >
+                  {item.label}
+                </a>
               ))}
-              <Button className="mt-2" asChild>
+              <div className="h-px w-full bg-border/50 my-4" />
+              <Button size="lg" className="h-14 rounded-2xl text-base font-bold shadow-lg shadow-primary/20" asChild>
                 <a href="#contact" onClick={() => setIsMenuOpen(false)}>Let's Talk</a>
               </Button>
             </div>

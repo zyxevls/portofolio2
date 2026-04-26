@@ -85,13 +85,13 @@ export function TechStack() {
       <div className="absolute top-0 right-0 -z-10 h-[500px] w-[500px] bg-cyan-500/5 blur-[140px] rounded-full" />
 
       <div className="container mx-auto px-6 relative">
-        <div className="flex flex-col lg:flex-row items-center gap-16 lg:gap-32">
+        <div className="flex flex-col lg:flex-row items-center gap-16 lg:gap-24">
 
           {/* Left Side: Dynamic Marquees */}
-          <div className="w-full lg:w-[60%] flex flex-col gap-10 select-none order-2 lg:order-1">
+          <div className="w-full lg:w-[60%] flex flex-col gap-8 select-none order-2 lg:order-1">
             {/* Languages Row */}
             <div className="flex overflow-hidden mask-[linear-gradient(to_right,transparent,black_15%,black_85%,transparent)]">
-              <div className="flex animate-marquee-left gap-10 whitespace-nowrap py-6">
+              <div className="flex animate-marquee-left gap-8 whitespace-nowrap py-4">
                 {languages.concat(languages).map((tech, i) => (
                   <TechPod key={`lang-${i}`} tech={tech} rotateDir={1} />
                 ))}
@@ -100,7 +100,7 @@ export function TechStack() {
 
             {/* Tools Row */}
             <div className="flex overflow-hidden mask-[linear-gradient(to_right,transparent,black_15%,black_85%,transparent)]">
-              <div className="flex animate-marquee-right gap-10 whitespace-nowrap py-6">
+              <div className="flex animate-marquee-right gap-8 whitespace-nowrap py-4">
                 {tools.concat(tools).map((tech, i) => (
                   <TechPod key={`tool-${i}`} tech={tech} rotateDir={-1} />
                 ))}
@@ -109,7 +109,7 @@ export function TechStack() {
           </div>
 
           {/* Right Side: Sophisticated Text Section */}
-          <div className="w-full lg:w-[40%] flex flex-col items-center lg:items-end text-center lg:text-right space-y-8 order-1 lg:order-2">
+          <div className="w-full lg:w-[40%] flex flex-col items-center lg:items-end text-center lg:text-right space-y-6 order-1 lg:order-2">
             <div className="space-y-4">
               <motion.div
                 initial={{ opacity: 0, x: 20 }}
@@ -138,16 +138,8 @@ export function TechStack() {
               transition={{ delay: 0.2 }}
               className="text-base md:text-lg text-muted-foreground leading-relaxed max-w-sm lg:ml-auto font-medium"
             >
-              Creating the best Digital Solutions with the latest technologies and standard industry.
+              Leveraging industry-leading tools and languages to build robust, scalable, and performance-optimized digital experiences.
             </motion.p>
-
-            {/* Premium Divider Accent */}
-            <motion.div
-              initial={{ scaleX: 0 }}
-              whileInView={{ scaleX: 1 }}
-              viewport={{ once: true }}
-              className="h-px w-32 bg-linear-to-r from-transparent to-primary/40 origin-right"
-            />
           </div>
 
         </div>
@@ -164,10 +156,14 @@ export function TechStack() {
           100% { transform: translateX(0); }
         }
         .animate-marquee-left {
-          animation: marquee-left 35s linear infinite;
+          animation: marquee-left 40s linear infinite;
         }
         .animate-marquee-right {
-          animation: marquee-right 45s linear infinite;
+          animation: marquee-right 50s linear infinite;
+        }
+        @media (max-width: 768px) {
+          .animate-marquee-left { animation-duration: 25s; }
+          .animate-marquee-right { animation-duration: 30s; }
         }
       `}} />
     </section>

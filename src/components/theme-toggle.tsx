@@ -1,3 +1,4 @@
+import * as React from "react";
 import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import { motion, AnimatePresence } from "framer-motion";
@@ -17,8 +18,10 @@ interface ThemeToggleProps {
 export function ThemeToggle({ className }: ThemeToggleProps) {
     const mounted = useMounted();
     const { resolvedTheme, setTheme } = useTheme();
+    const [isPending, startTransition] = React.useTransition();
 
     const handleThemeToggle = (event: React.MouseEvent<HTMLButtonElement>) => {
+        if (isPending) return;
         const nextTheme = resolvedTheme === "dark" ? "light" : "dark";
         const isMobileDevice = window.matchMedia("(max-width: 768px), (pointer: coarse)").matches;
         
@@ -36,23 +39,27 @@ export function ThemeToggle({ className }: ThemeToggleProps) {
         const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
         const transitionDocument = document as ViewTransitionCapableDocument;
 
-        if (transitionDocument.startViewTransition && !reduceMotion && !isMobileDevice) {
+        if (transitionDocument.startViewTransition && !reduceMotion) {
             transitionDocument.startViewTransition(() => {
-                setTheme(nextTheme);
+                startTransition(() => {
+                    setTheme(nextTheme);
+                });
             });
             return;
         }
 
         const root = document.documentElement;
         const fallbackClass = isMobileDevice ? "theme-switching-mobile" : "theme-switching";
-        const fallbackDuration = isMobileDevice ? 220 : 360;
+        const fallbackDuration = isMobileDevice ? 200 : 300;
 
         root.classList.add(fallbackClass);
-        setTheme(nextTheme);
+        startTransition(() => {
+            setTheme(nextTheme);
+        });
 
         window.setTimeout(() => {
             root.classList.remove(fallbackClass);
-        }, fallbackDuration + 80);
+        }, fallbackDuration + 50);
     };
 
     if (!mounted) return null;
@@ -92,34 +99,15 @@ export function ThemeToggle({ className }: ThemeToggleProps) {
                     {isDark ? "Light" : "Dark"}
                 </motion.span>
 
-                {/* Icon Container */}
-                <div className="flex size-8 items-center justify-center rounded-full bg-foreground/5 text-foreground transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
-                    <AnimatePresence mode="wait">
-                        {isDark ? (
-                            <motion.div
-                                key="sun"
-                                initial={{ rotate: -90, opacity: 0 }}
-                                animate={{ rotate: 0, opacity: 1 }}
-                                exit={{ rotate: 90, opacity: 0 }}
-                                transition={{ duration: 0.2 }}
-                            >
-                                <Sun className="size-4" />
-                            </motion.div>
-                        ) : (
-                            <motion.div
-                                key="moon"
-                                initial={{ rotate: -90, opacity: 0 }}
-                                animate={{ rotate: 0, opacity: 1 }}
-                                exit={{ rotate: 90, opacity: 0 }}
-                                transition={{ duration: 0.2 }}
-                            >
-                                <Moon className="size-4" />
-                            </motion.div>
-                        )}
-                    </AnimatePresence>
-                </div>
+            {/* Icon Container */}
+            <div className="flex size-8 items-center justify-center rounded-full bg-foreground/5 text-foreground transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
+                {isDark ? (
+                    <Sun className="size-4" />
+                ) : (
+                    <Moon className="size-4" />
+                )}
+            </div>
             </div>
         </motion.button>
     );
 }
-

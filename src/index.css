@@ -20,8 +20,8 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
-  --font-sans: "Manrope", sans-serif;
-  --font-display: "Sora", sans-serif;
+  --font-sans: "Plus Jakarta Sans", sans-serif;
+  --font-display: "Outfit", sans-serif;
 }
 
 :root {
@@ -46,12 +46,13 @@
   --input: #e2e8f0;
   --ring: #0d9488;
   --hover-text: #020617;
+  --bg-gradient-1: rgba(249, 115, 22, 0.14);
+  --bg-gradient-2: rgba(15, 118, 110, 0.16);
+  --bg-gradient-3: #f9faf6;
+  --bg-gradient-4: #eff4ef;
+  --bg-gradient-5: #ebf2f0;
+  --bg-gradient-6: rgba(37, 99, 235, 0.1);
 }
-
-@supports (view-transition-name: root) {
-  ::view-transition-group(root) {
-    animation-duration: 1ms;
-  }
 
   ::view-transition-old(root),
   ::view-transition-new(root) {
@@ -59,17 +60,27 @@
     mix-blend-mode: normal;
   }
 
-  ::view-transition-new(root) {
-    clip-path: circle(0 at var(--theme-x) var(--theme-y));
-    animation: theme-circle-reveal 560ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  ::view-transition-old(root) {
+    z-index: 1;
+    animation: 400ms ease-out both fade-out;
   }
-}
 
-@keyframes theme-circle-reveal {
-  to {
-    clip-path: circle(var(--theme-end-radius) at var(--theme-x) var(--theme-y));
+  ::view-transition-new(root) {
+    z-index: 2;
+    animation: 600ms cubic-bezier(0.4, 0, 0.2, 1) both circle-reveal;
+    clip-path: circle(0 at var(--theme-x) var(--theme-y));
+    will-change: clip-path;
   }
-}
+
+  @keyframes fade-out {
+    from { opacity: 1; }
+    to { opacity: 0; }
+  }
+
+  @keyframes circle-reveal {
+    from { clip-path: circle(0 at var(--theme-x) var(--theme-y)); }
+    to { clip-path: circle(var(--theme-end-radius) at var(--theme-x) var(--theme-y)); }
+  }
 
 .dark {
   --background: #091018;
@@ -90,6 +101,12 @@
   --input: rgba(143, 163, 191, 0.35);
   --ring: #2dd4bf;
   --hover-text: #ffffff;
+  --bg-gradient-1: rgba(45, 212, 191, 0.12);
+  --bg-gradient-2: rgba(56, 189, 248, 0.14);
+  --bg-gradient-3: #071018;
+  --bg-gradient-4: #091423;
+  --bg-gradient-5: #0a1827;
+  --bg-gradient-6: rgba(37, 99, 235, 0.14);
 }
 
 @layer base {
@@ -101,9 +118,9 @@
   body {
     @apply min-h-screen bg-background text-foreground font-sans antialiased;
     background-image:
-      radial-gradient(circle at 10% 8%, rgba(249, 115, 22, 0.14), transparent 34%),
-      radial-gradient(circle at 84% 0%, rgba(15, 118, 110, 0.16), transparent 30%),
-      linear-gradient(180deg, #f9faf6 0%, #eff4ef 46%, #ebf2f0 100%);
+      radial-gradient(circle at 10% 8%, var(--bg-gradient-1), transparent 34%),
+      radial-gradient(circle at 84% 0%, var(--bg-gradient-2), transparent 30%),
+      linear-gradient(180deg, var(--bg-gradient-3) 0%, var(--bg-gradient-4) 46%, var(--bg-gradient-5) 100%);
     overflow-x: hidden;
     position: relative;
   }
@@ -111,18 +128,43 @@
   body::before {
     content: "";
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    opacity: 0.035;
+    inset: 0;
+    opacity: 0.015;
     pointer-events: none;
     z-index: 99;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 250 250' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-    filter: contrast(120%) brightness(100%);
+    background-image: url("https://www.transparenttextures.com/patterns/p6.png");
+    will-change: transform;
+    transition: opacity 300ms ease;
   }
 
-  /* Modern Scrollbar */
+  html.theme-switching body::before {
+    opacity: 0;
+  }
+
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    opacity: 0.6;
+    pointer-events: none;
+    background-image: 
+      radial-gradient(circle at 15% 20%, var(--bg-gradient-1), transparent 28%),
+      radial-gradient(circle at 78% 0%, var(--bg-gradient-2), transparent 30%),
+      radial-gradient(circle at 80% 70%, var(--bg-gradient-6), transparent 32%);
+    animation: ambient-pulse 15s ease-in-out infinite;
+    will-change: transform, opacity;
+  }
+
+  html.theme-switching body::after {
+    animation-play-state: paused;
+  }
+
+  @keyframes ambient-pulse {
+    0%, 100% { opacity: 0.55; transform: scale(1); }
+    50% { opacity: 0.85; transform: scale(1.02); }
+  }
+
   ::-webkit-scrollbar {
     width: 10px;
   }
@@ -142,15 +184,10 @@
     background-color: var(--muted-foreground);
   }
 
-  .dark body {
-    background-image:
-      radial-gradient(circle at 10% 5%, rgba(45, 212, 191, 0.12), transparent 36%),
-      radial-gradient(circle at 84% 0%, rgba(56, 189, 248, 0.14), transparent 32%),
-      linear-gradient(180deg, #071018 0%, #091423 52%, #0a1827 100%);
-  }
 
-  * {
-    @apply border-border;
+  section {
+    content-visibility: auto;
+    contain-intrinsic-size: 1px 500px;
   }
 
   h1,
@@ -167,30 +204,8 @@
   }
 
   html.theme-switching body,
-  html.theme-switching .lux-card,
-  html.theme-switching button,
-  html.theme-switching a,
-  html.theme-switching input,
-  html.theme-switching textarea,
-  html.theme-switching [class*="bg-"],
-  html.theme-switching [class*="text-"] {
-    transition:
-      background-color 360ms ease,
-      border-color 360ms ease,
-      color 360ms ease,
-      fill 360ms ease,
-      stroke 360ms ease,
-      box-shadow 360ms ease,
-      opacity 360ms ease;
-  }
-
-  html.theme-switching-mobile body,
-  html.theme-switching-mobile .lux-card,
-  html.theme-switching-mobile button {
-    transition:
-      background-color 220ms ease,
-      border-color 220ms ease,
-      color 220ms ease;
+  html.theme-switching .lux-card {
+    transition: background-color 300ms linear;
   }
 }
 
@@ -200,68 +215,49 @@
     --my: 50%;
     position: relative;
     overflow: hidden;
+    background: var(--card);
+    border: 1px solid var(--border);
     transition:
-      transform 320ms cubic-bezier(0.22, 1, 0.36, 1),
-      box-shadow 320ms cubic-bezier(0.22, 1, 0.36, 1),
-      border-color 320ms ease;
+      transform 400ms cubic-bezier(0.23, 1, 0.32, 1),
+      box-shadow 400ms cubic-bezier(0.23, 1, 0.32, 1),
+      border-color 400ms ease,
+      background-color 400ms ease;
   }
 
   .lux-card::before {
     content: "";
     position: absolute;
-    inset: -1px;
-    background:
-      radial-gradient(220px circle at var(--mx) var(--my), rgba(45, 212, 191, 0.19), transparent 56%),
-      radial-gradient(220px circle at calc(var(--mx) - 10%) calc(var(--my) + 8%), rgba(249, 115, 22, 0.15), transparent 62%);
+    inset: 0;
+    background: radial-gradient(
+      800px circle at var(--mx) var(--my),
+      rgba(45, 212, 191, 0.08),
+      transparent 40%
+    );
     opacity: 0;
-    pointer-events: none;
-    transition: opacity 260ms ease, background-position 160ms ease-out;
+    transition: opacity 500ms ease;
     z-index: 0;
   }
 
-  .lux-card::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    border: 1px solid transparent;
-    pointer-events: none;
-    transition: border-color 260ms ease;
-    z-index: 1;
-  }
-
   .lux-card:hover {
-    transform: translateY(-7px);
-    box-shadow:
-      0 20px 45px rgba(2, 10, 22, 0.16),
-      0 8px 18px rgba(15, 118, 110, 0.14),
-      0 0 20px rgba(45, 212, 191, 0.2);
-    border-color: rgba(45, 212, 191, 0.46);
+    transform: translateY(-5px);
+    border-color: rgba(45, 212, 191, 0.3);
+    background: color-mix(in srgb, var(--card), transparent 20%);
+    backdrop-filter: blur(8px);
+    box-shadow: 
+      0 10px 30px -10px rgba(2, 10, 22, 0.12),
+      0 0 20px -5px rgba(45, 212, 191, 0.1);
   }
 
   .dark .lux-card:hover {
-    box-shadow:
-      0 24px 52px rgba(0, 0, 0, 0.48),
-      0 10px 24px rgba(56, 189, 248, 0.2),
-      0 0 30px rgba(45, 212, 191, 0.15);
-    border-color: rgba(103, 232, 249, 0.5);
+    background: rgba(17, 28, 42, 0.6);
+    box-shadow: 
+      0 20px 40px -15px rgba(0, 0, 0, 0.4),
+      0 0 25px -10px rgba(45, 212, 191, 0.2);
+    border-color: rgba(45, 212, 191, 0.4);
   }
 
   .lux-card:hover::before {
     opacity: 1;
-  }
-
-  .lux-card:focus-within::before {
-    opacity: 1;
-  }
-
-  .lux-card:hover::after {
-    border-color: rgba(56, 189, 248, 0.28);
-  }
-
-  .lux-card > * {
-    position: relative;
-    z-index: 2;
   }
 
   input:focus,
