@@ -14,7 +14,4 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
-  server: {
-    allowedHosts: ['localhost', 'window-wagon-kay-robbie.trycloudflare.com']
-  }
 })
