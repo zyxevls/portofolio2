@@ -1,8 +1,10 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowRight, Mail, Send } from "lucide-react";
 import { useRef } from "react";
+import { useLanguage } from "@/providers/language-provider";
 
 export function CallToAction() {
+  const { content } = useLanguage();
   const sectionRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -37,13 +39,13 @@ export function CallToAction() {
           style={{ x: xLeft }}
           className="text-[25vw] font-black leading-none whitespace-nowrap"
         >
-          READY TO START
+          {content.common.readyToStart}
         </motion.h2>
         <motion.h2
           style={{ x: xRight }}
           className="text-[25vw] font-black leading-none whitespace-nowrap"
         >
-          YOUR PROJECT?
+          {content.common.yourProject}
         </motion.h2>
       </div>
 
@@ -59,17 +61,17 @@ export function CallToAction() {
               className="flex items-center justify-center lg:justify-start gap-3 text-primary font-bold uppercase tracking-[0.4em] text-[10px] mb-8"
             >
               <span className="h-px w-10 bg-primary" />
-              Collaborate
+              {content.common.collaborate}
             </motion.div>
 
             <h2 className="text-6xl md:text-8xl lg:text-[7.5vw] font-black tracking-tighter text-foreground leading-none mb-10 uppercase">
-              Let's build <br />
-              <span className="text-primary italic font-serif">the future</span> <br />
-              together.
+              {content.common.letsBuild} <br />
+              <span className="text-primary italic font-serif">{content.common.theFuture}</span> <br />
+              {content.common.together}
             </h2>
 
             <p className="text-muted-foreground text-base md:text-lg max-w-xl leading-relaxed mb-10 mx-auto lg:mx-0 font-medium">
-              Transforming bold ideas into high-performance digital reality. Let's create something that scales and inspires.
+              {content.common.ctaDescription}
             </p>
           </div>
 
@@ -96,21 +98,21 @@ export function CallToAction() {
                 </div>
 
                 <div>
-                  <h3 className="text-4xl font-bold text-foreground dark:text-white mb-2 tracking-tight">Kickstart Now</h3>
-                  <p className="text-muted-foreground dark:text-white/60 text-sm font-medium tracking-wide">Ready to chat? Response within 24h.</p>
+                  <h3 className="text-4xl font-bold text-foreground dark:text-white mb-2 tracking-tight">{content.common.kickstartNow}</h3>
+                  <p className="text-muted-foreground dark:text-white/60 text-sm font-medium tracking-wide">{content.common.readyToChat}</p>
                 </div>
 
                 <a
                   href="#contact"
                   className="group/btn relative h-22 w-full rounded-2xl bg-primary dark:bg-white text-primary-foreground dark:text-black font-black text-2xl flex items-center justify-center gap-4 transition-all duration-500 hover:scale-[1.02] active:scale-95 shadow-xl"
                 >
-                  Get In Touch
+                  {content.common.getInTouch}
                   <ArrowRight className="size-8 transition-transform duration-500 group-hover/btn:translate-x-3" />
                 </a>
 
                 <div className="flex items-center gap-6">
                   <div className="flex-1 h-px bg-border/50 dark:bg-white/10" />
-                  <span className="text-muted-foreground/40 dark:text-white/20 text-[10px] font-bold uppercase tracking-widest">OR</span>
+                  <span className="text-muted-foreground/40 dark:text-white/20 text-[10px] font-bold uppercase tracking-widest">{content.common.or}</span>
                   <div className="flex-1 h-px bg-border/50 dark:bg-white/10" />
                 </div>
 

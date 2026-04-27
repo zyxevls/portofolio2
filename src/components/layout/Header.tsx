@@ -5,6 +5,8 @@ import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { portfolioContent } from "@/data/portfolio-content";
+import { useLanguage } from "@/providers/language-provider";
+import { LanguageToggle } from "@/components/language-toggle";
 
 import logoDark from "@/assets/logo-dark.png";
 import logoLight from "@/assets/logo-light.png";
@@ -16,7 +18,7 @@ interface HeaderProps {
 export function Header({ isScrolled }: HeaderProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { resolvedTheme } = useTheme();
-  const content = portfolioContent;
+  const { content } = useLanguage();
 
   const logoSrc = resolvedTheme === "dark" ? logoLight : logoDark;
 
@@ -64,8 +66,9 @@ export function Header({ isScrolled }: HeaderProps) {
               </div>
 
               <div className="flex items-center gap-2">
+                <LanguageToggle />
                 <Button className="hidden md:inline-flex" asChild>
-                  <a href="#contact">Let's Talk</a>
+                  <a href="#contact">{content.common.letsTalk}</a>
                 </Button>
                 <Button
                   variant="outline"
@@ -93,7 +96,7 @@ export function Header({ isScrolled }: HeaderProps) {
             className="absolute inset-x-6 top-20 z-50 rounded-4xl border border-border/60 bg-background/90 p-8 shadow-2xl shadow-slate-950/20 backdrop-blur-2xl md:hidden"
           >
             <div className="flex flex-col gap-4">
-              <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-muted-foreground mb-2">Navigation</p>
+              <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-muted-foreground mb-2">{content.common.navigation}</p>
               {content.nav.map((item) => (
                 <a 
                   key={item.href} 
@@ -106,7 +109,7 @@ export function Header({ isScrolled }: HeaderProps) {
               ))}
               <div className="h-px w-full bg-border/50 my-4" />
               <Button size="lg" className="h-14 rounded-2xl text-base font-bold shadow-lg shadow-primary/20" asChild>
-                <a href="#contact" onClick={() => setIsMenuOpen(false)}>Let's Talk</a>
+                <a href="#contact" onClick={() => setIsMenuOpen(false)}>{content.common.letsTalk}</a>
               </Button>
             </div>
           </motion.div>

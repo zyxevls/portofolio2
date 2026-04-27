@@ -3,12 +3,12 @@ import { BriefcaseBusiness } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
-import { portfolioContent } from "@/data/portfolio-content";
+import { useLanguage } from "@/providers/language-provider";
 import { iconMap } from "@/lib/icon-map";
 import { cn } from "@/lib/utils";
 
 export function Contact() {
-  const content = portfolioContent;
+  const { content } = useLanguage();
 
   const handleCardPointerMove = (event: React.MouseEvent<HTMLDivElement>) => {
     const rect = event.currentTarget.getBoundingClientRect();
@@ -32,19 +32,19 @@ export function Contact() {
           onMouseMove={handleCardPointerMove}
         >
           <CardHeader>
-            <Badge variant="outline" className="w-fit">Hire Me</Badge>
-            <CardTitle className="text-2xl">Let’s Build Something Useful</CardTitle>
+            <Badge variant="outline" className="w-fit">{content.common.hireMe}</Badge>
+            <CardTitle className="text-2xl">{content.common.letsBuildSomething}</CardTitle>
             <CardDescription>
-              Open for freelance and long-term product collaboration. I can help you ship polished interfaces with strong architecture.
+              {content.common.contactSummary}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="rounded-2xl border border-border/70 bg-background/65 p-4">
-              <p className="text-sm font-semibold">What you get</p>
+              <p className="text-sm font-semibold">{content.common.whatYouGet}</p>
               <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
-                <li className="flex items-center gap-2"><BriefcaseBusiness className="size-4 text-primary" /> Production-ready React frontend</li>
-                <li className="flex items-center gap-2"><BriefcaseBusiness className="size-4 text-primary" /> Strong UX and responsive system</li>
-                <li className="flex items-center gap-2"><BriefcaseBusiness className="size-4 text-primary" /> Maintainable, scalable codebase</li>
+                <li className="flex items-center gap-2"><BriefcaseBusiness className="size-4 text-primary" /> {content.common.productionReady}</li>
+                <li className="flex items-center gap-2"><BriefcaseBusiness className="size-4 text-primary" /> {content.common.strongUx}</li>
+                <li className="flex items-center gap-2"><BriefcaseBusiness className="size-4 text-primary" /> {content.common.maintainableCode}</li>
               </ul>
             </div>
             <div className="flex flex-wrap gap-3">
@@ -72,33 +72,33 @@ export function Contact() {
           onMouseMove={handleCardPointerMove}
         >
           <CardHeader>
-            <CardTitle className="text-2xl">Project Inquiry Form</CardTitle>
-            <CardDescription>Share your project goals and I will get back to you quickly.</CardDescription>
+            <CardTitle className="text-2xl">{content.common.projectInquiry}</CardTitle>
+            <CardDescription>{content.common.projectGoals}</CardDescription>
           </CardHeader>
           <CardContent>
             <form className="grid gap-4" onSubmit={(event) => event.preventDefault()}>
               <motion.input 
                 className="h-11 rounded-xl border border-input bg-background/70 px-4 text-sm outline-none ring-0 transition focus:border-primary focus:bg-background/90" 
                 type="text" 
-                placeholder="Your Name"
+                placeholder={content.common.yourName}
                 whileFocus={{ y: -2, scale: 1.01 }}
                 transition={{ type: "spring", stiffness: 300, damping: 25 }}
               />
               <motion.input 
                 className="h-11 rounded-xl border border-input bg-background/70 px-4 text-sm outline-none ring-0 transition focus:border-primary focus:bg-background/90" 
                 type="email" 
-                placeholder="Email Address"
+                placeholder={content.common.emailAddress}
                 whileFocus={{ y: -2, scale: 1.01 }}
                 transition={{ type: "spring", stiffness: 300, damping: 25 }}
               />
               <motion.textarea 
                 className="min-h-32 rounded-xl border border-input bg-background/70 p-4 text-sm outline-none ring-0 transition focus:border-primary focus:bg-background/90" 
-                placeholder="How can I help you?"
+                placeholder={content.common.howCanIHelp}
                 whileFocus={{ y: -2, scale: 1.01 }}
                 transition={{ type: "spring", stiffness: 300, damping: 25 }}
               />
               <Button type="submit" className="h-11 gap-2">
-                Send Message
+                {content.common.sendMessage}
               </Button>
             </form>
           </CardContent>

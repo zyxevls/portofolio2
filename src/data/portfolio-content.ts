@@ -104,6 +104,16 @@ export const portfolioContent: PortfolioContent = {
             quote: "The hover states and motion help the page feel alive without becoming distracting or noisy.",
             author: "Design Collaborator",
             role: "UI Designer"
+        },
+        {
+            quote: "Working with Muhamad was a game-changer. The attention to detail in the UI is top-notch.",
+            author: "Alex Rivera",
+            role: "CEO at TechFlow"
+        },
+        {
+            quote: "A rare talent that understands both the aesthetic and the technical requirements of modern apps.",
+            author: "Sarah Chen",
+            role: "Senior UX Architect"
         }
     ],
     projects: [
@@ -158,5 +168,59 @@ export const portfolioContent: PortfolioContent = {
         { label: "GitHub", href: "https://github.com/", icon: "github" },
         { label: "LinkedIn", href: "https://linkedin.com/", icon: "linkedin" },
         { label: "Email", href: "mailto:hello@example.com", icon: "mail" }
-    ]
+    ],
+    common: {
+        availableForWork: "Available for work",
+        downloadCv: "Download CV",
+        letsTalk: "Let's Talk",
+        navigation: "Navigation",
+        myExpertise: "My Expertise",
+        myQualityServices: "My Quality Services",
+        servicesDescription: "We put your ideas and thus your wishes in the form of a unique web project that inspires you and your customers.",
+        learnMore: "Learn More",
+        ourWorkflow: "Our Workflow",
+        workingProcess: "Working Process",
+        processDescription: "A structured approach to bringing your digital vision to life with precision and care.",
+        myTestimonials: "My Testimonials",
+        clientFeedback: "Client Feedback",
+        recentProjects: "Recent Projects",
+        myWork: "My Work",
+        professionalSkills: "Professional Skills",
+        techStack: "Technology Stack",
+        techStackDescription: "Leveraging industry-leading tools and languages to build robust, scalable, and performance-optimized digital experiences.",
+        builtWith: "Built with",
+        modernTech: "Modern Tech",
+        getInTouch: "Get In Touch",
+        contactDescription: "Have a project in mind? Let's discuss how we can build something amazing together.",
+        hireMe: "Hire Me",
+        letsBuildSomething: "Let's Build Something Useful",
+        contactSummary: "Open for freelance and long-term product collaboration. I can help you ship polished interfaces with strong architecture.",
+        whatYouGet: "What you get",
+        productionReady: "Production-ready React frontend",
+        strongUx: "Strong UX and responsive system",
+        maintainableCode: "Maintainable, scalable codebase",
+        projectInquiry: "Project Inquiry Form",
+        projectGoals: "Share your project goals and I will get back to you quickly.",
+        yourName: "Your Name",
+        emailAddress: "Email Address",
+        howCanIHelp: "How can I help you?",
+        sendMessage: "Send Message",
+        readyToStart: "READY TO START",
+        yourProject: "YOUR PROJECT?",
+        collaborate: "Collaborate",
+        letsBuild: "Let's build",
+        theFuture: "the future",
+        together: "together.",
+        ctaDescription: "Transforming bold ideas into high-performance digital reality. Let's create something that scales and inspires.",
+        kickstartNow: "Kickstart Now",
+        readyToChat: "Ready to chat? Response within 24h.",
+        or: "OR",
+        active: "Active",
+        footerDescription: "Crafting high-performance digital experiences with precision.",
+        menu: "Menu",
+        connect: "Connect",
+        quickContact: "Quick Contact",
+        allRightsReserved: "All rights reserved.",
+        backToTop: "Back to top"
+    }
 };

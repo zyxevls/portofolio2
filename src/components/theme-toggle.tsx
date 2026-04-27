@@ -1,9 +1,10 @@
 import * as React from "react";
 import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { useMounted } from "@/providers/theme-provider";
+import { useLanguage } from "@/providers/language-provider";
 
 type ViewTransitionCapableDocument = Document & {
     startViewTransition?: (updateCallback: () => void) => {
@@ -18,10 +19,12 @@ interface ThemeToggleProps {
 export function ThemeToggle({ className }: ThemeToggleProps) {
     const mounted = useMounted();
     const { resolvedTheme, setTheme } = useTheme();
-    const [isPending, startTransition] = React.useTransition();
+    const { language } = useLanguage();
+    const isSwitchingRef = React.useRef(false);
+    const cleanupTimeoutRef = React.useRef<number | null>(null);
 
     const handleThemeToggle = (event: React.MouseEvent<HTMLButtonElement>) => {
-        if (isPending) return;
+        if (isSwitchingRef.current) return;
         const nextTheme = resolvedTheme === "dark" ? "light" : "dark";
         const isMobileDevice = window.matchMedia("(max-width: 768px), (pointer: coarse)").matches;
         
@@ -38,33 +41,69 @@ export function ThemeToggle({ className }: ThemeToggleProps) {
 
         const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
         const transitionDocument = document as ViewTransitionCapableDocument;
+        const root = document.documentElement;
+        const useViewTransition = Boolean(transitionDocument.startViewTransition) && !reduceMotion && !isMobileDevice;
 
-        if (transitionDocument.startViewTransition && !reduceMotion) {
-            transitionDocument.startViewTransition(() => {
-                startTransition(() => {
-                    setTheme(nextTheme);
-                });
+        isSwitchingRef.current = true;
+
+        if (useViewTransition && transitionDocument.startViewTransition) {
+            root.classList.add("theme-vt");
+            const transition = transitionDocument.startViewTransition(() => {
+                setTheme(nextTheme);
+            });
+
+            transition.finished.finally(() => {
+                root.classList.remove("theme-vt");
+                isSwitchingRef.current = false;
             });
             return;
         }
 
-        const root = document.documentElement;
         const fallbackClass = isMobileDevice ? "theme-switching-mobile" : "theme-switching";
-        const fallbackDuration = isMobileDevice ? 200 : 300;
+        const fallbackDuration = isMobileDevice ? 180 : 240;
+
+        if (cleanupTimeoutRef.current !== null) {
+            window.clearTimeout(cleanupTimeoutRef.current);
+        }
 
         root.classList.add(fallbackClass);
-        startTransition(() => {
-            setTheme(nextTheme);
-        });
 
-        window.setTimeout(() => {
-            root.classList.remove(fallbackClass);
-        }, fallbackDuration + 50);
+        requestAnimationFrame(() => {
+            setTheme(nextTheme);
+
+            cleanupTimeoutRef.current = window.setTimeout(() => {
+                root.classList.remove(fallbackClass);
+                isSwitchingRef.current = false;
+                cleanupTimeoutRef.current = null;
+            }, fallbackDuration);
+        });
     };
+
+    React.useEffect(() => {
+        return () => {
+            if (cleanupTimeoutRef.current !== null) {
+                window.clearTimeout(cleanupTimeoutRef.current);
+            }
+        };
+    }, []);
 
     if (!mounted) return null;
 
     const isDark = resolvedTheme === "dark";
+    const text = {
+        en: {
+            light: "Light",
+            dark: "Dark",
+            switchToLight: "Switch to light mode",
+            switchToDark: "Switch to dark mode"
+        },
+        id: {
+            light: "Terang",
+            dark: "Gelap",
+            switchToLight: "Ganti ke mode terang",
+            switchToDark: "Ganti ke mode gelap"
+        }
+    }[language];
 
     return (
         <motion.button
@@ -75,7 +114,7 @@ export function ThemeToggle({ className }: ThemeToggleProps) {
                 "relative flex items-center h-12 rounded-l-full border border-r-0 border-border bg-background/60 backdrop-blur-xl transition-colors hover:bg-background/90 group overflow-hidden",
                 className
             )}
-            aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
+            aria-label={isDark ? text.switchToLight : text.switchToDark}
         >
             {/* Background Highlight */}
             <motion.div 
@@ -96,7 +135,7 @@ export function ThemeToggle({ className }: ThemeToggleProps) {
                     transition={{ duration: 0.3, ease: "easeOut" }}
                     className="overflow-hidden whitespace-nowrap text-xs font-bold uppercase tracking-widest text-foreground"
                 >
-                    {isDark ? "Light" : "Dark"}
+                    {isDark ? text.light : text.dark}
                 </motion.span>
 
             {/* Icon Container */}

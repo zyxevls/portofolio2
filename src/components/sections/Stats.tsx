@@ -2,14 +2,14 @@ import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import { Card, CardDescription, CardTitle } from "@/components/ui/card";
 import { CountUpNumber } from "@/components/shared/CountUpNumber";
-import { portfolioContent } from "@/data/portfolio-content";
+import { useLanguage } from "@/providers/language-provider";
 
 interface StatsProps {
   startStatsCount: boolean;
 }
 
 export function Stats({ startStatsCount }: StatsProps) {
-  const content = portfolioContent;
+  const { content } = useLanguage();
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 

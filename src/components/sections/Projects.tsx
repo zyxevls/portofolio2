@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { portfolioContent } from "@/data/portfolio-content";
+import { useLanguage } from "@/providers/language-provider";
 import { ArrowUpRight, ChevronLeft, ChevronRight } from "lucide-react";
 import useEmblaCarousel from "embla-carousel-react";
 import { useCallback, useEffect, useState } from "react";
@@ -72,7 +72,8 @@ function ProjectCard({ project, isActive }: { project: any, isActive: boolean })
 }
 
 export function Projects() {
-  const projects = portfolioContent.projects;
+  const { content, language } = useLanguage();
+  const { projects } = content;
   const extendedProjects = [...projects, ...projects, ...projects];
 
   const [emblaRef, emblaApi] = useEmblaCarousel({
@@ -103,8 +104,8 @@ export function Projects() {
   return (
     <section id="projects" className="relative h-screen min-h-[800px] flex items-center overflow-hidden bg-background">
       {/* Background Projects Label */}
-      <div className="absolute top-10 left-10 text-[10vw] font-black text-foreground/3 dark:text-white/2 select-none pointer-events-none leading-none">
-        PROJECTS
+      <div className="absolute top-10 left-10 text-[10vw] font-black text-foreground/3 dark:text-white/2 select-none pointer-events-none leading-none uppercase">
+        {content.common.recentProjects}
       </div>
 
       {/* Main Carousel Area */}
@@ -128,11 +129,11 @@ export function Projects() {
         <div className="bg-card/80 dark:bg-background/20 backdrop-blur-3xl border border-border/50 dark:border-white/5 rounded-4xl p-8 mt-24 pointer-events-auto shadow-2xl">
           <div className="flex items-center gap-3 text-primary font-bold uppercase tracking-[0.3em] text-[10px] mb-6">
             <span className="h-px w-8 bg-primary" />
-            Information
+            {language === "en" ? "Information" : "Informasi"}
           </div>
           <h2 className="font-display text-7xl font-black tracking-tighter text-foreground leading-[0.8] mb-10">
-            MY <br />
-            <span className="text-primary italic font-serif">LAB</span>
+            {content.common.myWork.split(" ").slice(0, -1).join(" ")} <br />
+            <span className="text-primary italic font-serif">{content.common.myWork.split(" ").slice(-1)}</span>
           </h2>
 
           <div className="h-40">

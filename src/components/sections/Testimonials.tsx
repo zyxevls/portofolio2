@@ -1,23 +1,9 @@
 import { motion } from "framer-motion";
-import { portfolioContent } from "@/data/portfolio-content";
+import { useLanguage } from "@/providers/language-provider";
 import { Card } from "@/components/ui/card";
 import { useCallback, useEffect, useState } from "react";
 import { ChevronLeft, ChevronRight, Quote } from "lucide-react";
 import useEmblaCarousel from "embla-carousel-react";
-
-const testimonials = [
-  ...portfolioContent.testimonials,
-  {
-    quote: "Working with Muhamad was a game-changer. The attention to detail in the UI is top-notch.",
-    author: "Alex Rivera",
-    role: "CEO at TechFlow"
-  },
-  {
-    quote: "A rare talent that understands both the aesthetic and the technical requirements of modern apps.",
-    author: "Sarah Chen",
-    role: "Senior UX Architect"
-  }
-];
 
 function TestimonialCard({ testimonial }: { testimonial: any }) {
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -71,6 +57,8 @@ function TestimonialCard({ testimonial }: { testimonial: any }) {
 }
 
 export function Testimonials() {
+  const { content } = useLanguage();
+  const { testimonials } = content;
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, align: "start" });
   const [selectedIndex, setSelectedIndex] = useState(0);
 
@@ -95,10 +83,13 @@ export function Testimonials() {
           <div className="flex flex-col gap-2">
             <div className="flex items-center gap-2 text-primary font-bold uppercase tracking-[0.2em] text-[9px]">
               <span className="h-px w-6 bg-primary/40" />
-              Testimonials
+              {content.common.myTestimonials}
             </div>
             <h2 className="font-display text-3xl md:text-4xl font-bold tracking-tight text-foreground">
-              What they <span className="text-primary italic font-serif">say</span>
+              {content.common.clientFeedback.split(" ").slice(0, -1).join(" ")}{" "}
+              <span className="text-primary italic font-serif">
+                {content.common.clientFeedback.split(" ").slice(-1)}
+              </span>
             </h2>
           </div>
 

@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { portfolioContent } from "@/data/portfolio-content";
+import { useLanguage } from "@/providers/language-provider";
 import { iconMap } from "@/lib/icon-map";
 
 const sophisticatedHover = {
@@ -10,7 +10,7 @@ const sophisticatedHover = {
 } as const;
 
 export function Services() {
-  const content = portfolioContent;
+  const { content } = useLanguage();
 
   const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
     const { currentTarget, clientX, clientY } = event;
@@ -35,7 +35,7 @@ export function Services() {
             viewport={{ once: true }}
             className="px-3 py-0.5 rounded-full bg-primary/10 border border-primary/20 text-[9px] font-bold uppercase tracking-[0.3em] text-primary"
           >
-            My Expertise
+            {content.common.myExpertise}
           </motion.div>
 
           <div className="space-y-2">
@@ -45,7 +45,10 @@ export function Services() {
               viewport={{ once: true }}
               className="font-display text-4xl md:text-5xl font-bold tracking-tight leading-tight"
             >
-              My Quality <span className="bg-linear-to-r from-primary to-cyan-500 bg-clip-text text-transparent">Services</span>
+              {content.common.myQualityServices.split(" ").slice(0, -1).join(" ")}{" "}
+              <span className="bg-linear-to-r from-primary to-cyan-500 bg-clip-text text-transparent">
+                {content.common.myQualityServices.split(" ").slice(-1)}
+              </span>
             </motion.h2>
 
             <motion.p
@@ -55,7 +58,7 @@ export function Services() {
               transition={{ delay: 0.1 }}
               className="max-w-xl mx-auto text-sm md:text-base text-muted-foreground leading-relaxed"
             >
-              We put your ideas and thus your wishes in the form of a unique web project that inspires you and your customers.
+              {content.common.servicesDescription}
             </motion.p>
           </div>
         </div>
@@ -100,7 +103,7 @@ export function Services() {
 
                     <div className="pt-8">
                       <div className="inline-flex items-center gap-3 text-[11px] font-bold uppercase tracking-[0.2em] text-primary group-hover:gap-5 transition-all duration-300 cursor-pointer">
-                        Learn More
+                        {content.common.learnMore}
                         <div className="h-px w-6 bg-primary group-hover:w-10 transition-all duration-300" />
                       </div>
                     </div>

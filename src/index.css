@@ -160,6 +160,14 @@
     animation-play-state: paused;
   }
 
+  html.theme-vt body::before {
+    opacity: 0;
+  }
+
+  html.theme-vt body::after {
+    animation-play-state: paused;
+  }
+
   @keyframes ambient-pulse {
     0%, 100% { opacity: 0.55; transform: scale(1); }
     50% { opacity: 0.85; transform: scale(1.02); }

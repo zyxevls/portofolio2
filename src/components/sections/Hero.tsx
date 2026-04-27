@@ -2,7 +2,7 @@ import { motion, type Variants } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { portfolioContent } from "@/data/portfolio-content";
+import { useLanguage } from "@/providers/language-provider";
 import { Stats } from "./Stats";
 import { FileText, Github, Linkedin } from "lucide-react";
 import profileImage from "@/assets/me.webp";
@@ -56,7 +56,7 @@ interface HeroProps {
 }
 
 export function Hero({ startStatsCount }: HeroProps) {
-  const content = portfolioContent;
+  const { content, language } = useLanguage();
 
   const handleCardPointerMove = (event: React.MouseEvent<HTMLDivElement>) => {
     const rect = event.currentTarget.getBoundingClientRect();
@@ -115,7 +115,7 @@ export function Hero({ startStatsCount }: HeroProps) {
               >
                 <Button size="lg" className="h-14 px-10 text-base font-bold w-full sm:w-auto rounded-2xl shadow-lg shadow-primary/20 transition-all hover:shadow-primary/30" asChild>
                   <a href="/src/assets/cv.pdf" download="CV - Muhamad Jaelani">
-                    Download CV
+                    {content.common.downloadCv}
                     <FileText size={18} className="ml-2" />
                   </a>
                 </Button>
@@ -136,11 +136,15 @@ export function Hero({ startStatsCount }: HeroProps) {
             </motion.div>
 
             <motion.div variants={itemVariants} className="flex flex-wrap items-center justify-center lg:justify-start gap-3 max-w-md">
-              {[
+              {(language === "en" ? [
                 "Full-Stack Precision",
                 "Type-Safe Development",
                 "Performance-First UX"
-              ].map((chip) => (
+              ] : [
+                "Presisi Full-Stack",
+                "Pengembangan Tipe-Aman",
+                "UX Mengutamakan Performa"
+              ]).map((chip) => (
                 <div
                   key={chip}
                   className="rounded-full px-4 py-2 text-[10px] font-bold uppercase tracking-widest bg-secondary/40 dark:bg-secondary/10 border border-border/50 text-slate-600 dark:text-secondary-foreground backdrop-blur-sm"
@@ -189,7 +193,7 @@ export function Hero({ startStatsCount }: HeroProps) {
                 className="absolute -bottom-4 -right-4 bg-background/90 backdrop-blur-xl border border-border/60 p-4 rounded-2xl shadow-xl z-20 flex items-center gap-3"
               >
                 <div className="h-3 w-3 rounded-full bg-green-500 animate-pulse" />
-                <span className="text-[11px] font-bold uppercase tracking-widest">Available for work</span>
+                <span className="text-[11px] font-bold uppercase tracking-widest">{content.common.availableForWork}</span>
               </motion.div>
             </motion.div>
           </motion.div>

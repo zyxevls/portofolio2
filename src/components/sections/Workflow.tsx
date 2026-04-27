@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { portfolioContent } from "@/data/portfolio-content";
+import { useLanguage } from "@/providers/language-provider";
 import { iconMap } from "@/lib/icon-map";
 
 function WorkflowRow({ step, index, displayIndex }: { step: any, index: number, displayIndex: string }) {
@@ -75,7 +75,7 @@ function WorkflowRow({ step, index, displayIndex }: { step: any, index: number, 
 }
 
 export function Workflow() {
-  const content = portfolioContent;
+  const { content } = useLanguage();
 
   return (
     <section className="relative py-32 overflow-hidden bg-background">
@@ -91,7 +91,7 @@ export function Workflow() {
             className="flex items-center gap-2 text-primary font-bold uppercase tracking-[0.3em] text-[10px]"
           >
             <div className="h-px w-8 bg-primary" />
-            Working Process
+            {content.common.workingProcess}
           </motion.div>
           <motion.h2
             initial={{ opacity: 0, x: -20 }}
@@ -100,7 +100,10 @@ export function Workflow() {
             transition={{ delay: 0.1 }}
             className="font-display text-4xl md:text-5xl font-bold tracking-tight text-foreground"
           >
-            How I <span className="text-primary italic font-serif">Work</span>
+            {content.common.ourWorkflow.split(" ").slice(0, -1).join(" ")}{" "}
+            <span className="text-primary italic font-serif">
+              {content.common.ourWorkflow.split(" ").slice(-1)}
+            </span>
           </motion.h2>
         </div>
 

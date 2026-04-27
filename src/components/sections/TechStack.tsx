@@ -1,4 +1,5 @@
 import { motion, useMotionValue, useMotionTemplate } from "framer-motion";
+import { useLanguage } from "@/providers/language-provider";
 
 const languages = [
   { name: "HTML5", slug: "html5" },
@@ -78,6 +79,7 @@ function TechPod({ tech, rotateDir = 1 }: { tech: { name: string; slug: string }
 }
 
 export function TechStack() {
+  const { content } = useLanguage();
   return (
     <section className="relative w-screen left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] overflow-hidden py-32 bg-background/50">
       {/* Dynamic Mesh Gradients */}
@@ -117,7 +119,7 @@ export function TechStack() {
                 viewport={{ once: true }}
                 className="px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-[10px] font-bold uppercase tracking-[0.4em] text-primary w-fit lg:ml-auto"
               >
-                Technology Stack
+                {content.common.techStack}
               </motion.div>
               <motion.h2
                 initial={{ opacity: 0, x: 20 }}
@@ -126,8 +128,8 @@ export function TechStack() {
                 transition={{ delay: 0.1 }}
                 className="font-display text-5xl md:text-6xl font-extrabold tracking-tighter leading-[0.9] text-foreground"
               >
-                Built with <br />
-                <span className="bg-linear-to-r from-primary to-cyan-400 bg-clip-text text-transparent">Modern Tech</span>
+                {content.common.builtWith} <br />
+                <span className="bg-linear-to-r from-primary to-cyan-400 bg-clip-text text-transparent">{content.common.modernTech}</span>
               </motion.h2>
             </div>
 
@@ -138,7 +140,7 @@ export function TechStack() {
               transition={{ delay: 0.2 }}
               className="text-base md:text-lg text-muted-foreground leading-relaxed max-w-sm lg:ml-auto font-medium"
             >
-              Leveraging industry-leading tools and languages to build robust, scalable, and performance-optimized digital experiences.
+              {content.common.techStackDescription}
             </motion.p>
           </div>
 
