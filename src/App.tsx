@@ -4,9 +4,14 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { CustomCursor } from "@/components/shared/CustomCursor";
+import { InteractiveBot } from "@/components/shared/InteractiveBot";
 
 import { Separator } from "@/components/ui/separator";
 import { ThemeToggle } from "@/components/theme-toggle";
+
+// SEO & Performance utilities
+import { injectStructuredData, updateMetaTags } from "@/lib/seo-utils";
+import { initPerformanceMonitoring, preloadCriticalResources } from "@/lib/performance-utils";
 
 import logoDark from "@/assets/logo-dark.png";
 
@@ -21,26 +26,47 @@ const Stats = lazy(() => import("@/components/sections/Stats").then(m => ({ defa
 const CallToAction = lazy(() => import("@/components/sections/CallToAction").then(m => ({ default: m.CallToAction })));
 const Contact = lazy(() => import("@/components/sections/Contact").then(m => ({ default: m.Contact })));
 
-export default function App() {
+export default function App()
+{
     const [showIntroLoader, setShowIntroLoader] = useState(true);
     const [startStatsCount, setStartStatsCount] = useState(false);
     const [isScrolled, setIsScrolled] = useState(false);
 
-    useEffect(() => {
-        const timer = window.setTimeout(() => {
+    // Initialize SEO and Performance monitoring on mount
+    useEffect(() =>
+    {
+        // Inject structured data for SEO
+        injectStructuredData();
+
+        // Update meta tags
+        updateMetaTags("home");
+
+        // Initialize performance monitoring
+        initPerformanceMonitoring();
+
+        // Preload critical resources
+        preloadCriticalResources();
+
+        // Dismiss loader
+        const timer = window.setTimeout(() =>
+        {
             setShowIntroLoader(false);
         }, 800);
+
         return () => window.clearTimeout(timer);
     }, []);
 
-    useEffect(() => {
+    useEffect(() =>
+    {
         if (!showIntroLoader) {
             setStartStatsCount(true);
         }
     }, [showIntroLoader]);
 
-    useEffect(() => {
-        const onScroll = () => {
+    useEffect(() =>
+    {
+        const onScroll = () =>
+        {
             setIsScrolled(window.scrollY > 30);
         };
         window.addEventListener("scroll", onScroll, { passive: true });
@@ -97,6 +123,7 @@ export default function App() {
 
             <Header isScrolled={isScrolled} />
 
+            {/* Theme Toggle - Top Right */}
             <motion.div
                 className="fixed right-0 top-1/2 z-40 -translate-y-1/2"
                 animate={{ x: [0, -2, 0] }}
@@ -105,8 +132,18 @@ export default function App() {
                 <ThemeToggle className="shadow-2xl" />
             </motion.div>
 
-            <main className="relative z-10 mx-auto flex w-full max-w-6xl flex-col gap-24 px-6 pb-20 md:gap-20 top-20">
-                <Suspense fallback={<div className="h-96 flex items-center justify-center">Loading experience...</div>}>
+            <motion.div
+                initial={{ opacity: 0, scale: 0.8, y: 20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                transition={{ delay: 0.8, duration: 0.8, ease: "easeOut" }}
+                className="fixed bottom-6 right-12 z-40 hidden md:block"
+                aria-label="Interactive bot assistant"
+            >
+                <InteractiveBot />
+            </motion.div>
+
+            <main className="relative z-10 mx-auto flex w-full max-w-7xl flex-col gap-10 px-6 pb-16 pt-14 md:gap-12 md:pt-16">
+                <Suspense fallback={<div className="flex h-72 items-center justify-center">Loading...</div>}>
                     <Hero startStatsCount={startStatsCount} />
                     <Separator />
                     <Services />
