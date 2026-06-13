@@ -59,10 +59,10 @@ export function Stats({ startStatsCount }: StatsProps) {
       {content.stats.map((stat, index) => (
         <motion.div 
           key={stat.label} 
-          className="flex items-center gap-4 py-2"
+          className="flex items-center gap-3 py-1"
         >
           <div className="flex flex-col">
-            <div className="text-4xl md:text-5xl font-bold tracking-tighter text-foreground">
+            <div className="text-3xl md:text-4xl font-extrabold tracking-tighter text-foreground">
               <CountUpNumber
                 value={stat.value}
                 delay={220 + index * 140}
@@ -70,8 +70,8 @@ export function Stats({ startStatsCount }: StatsProps) {
               />
             </div>
           </div>
-          <div className="h-8 w-px bg-border/40 hidden sm:block" />
-          <div className="text-[9px] md:text-xs font-semibold leading-tight text-muted-foreground uppercase tracking-[0.2em]">
+          <div className="h-6 w-px bg-border/40 hidden sm:block" />
+          <div className="text-[8px] md:text-[10px] font-semibold leading-tight text-muted-foreground uppercase tracking-[0.2em]">
             {stat.label}
           </div>
         </motion.div>

@@ -2,10 +2,9 @@ import type { PortfolioContent } from "@/types/portfolio-content";
 
 export const portfolioContent: PortfolioContent = {
     brand: "/assets/logo/logo-dark.png",
-    role: "Full-Stack | Web Development",
     tagline: "I am Muhamad Jaelani.",
     intro:
-        "A fullstack engineer specializing in frontend development, with a passion for crafting intuitive user interfaces and seamless digital experiences. With a strong foundation in both frontend and backend technologies, I thrive on bridging the gap between design and functionality to create impactful web applications.",
+        "Fullstack Developer from Rangkasbitung, Indonesia. I specialize in building high-quality web applications that are fast, responsive, and user-friendly. I am passionate about creating seamless digital experiences that help businesses grow and succeed online.",
     nav: [
         { label: "Overview", href: "#overview" },
         { label: "Projects", href: "#projects" },
