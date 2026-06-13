@@ -87,7 +87,6 @@ export interface TestimonialItem
 export interface PortfolioContent
 {
     brand: string;
-    role: string;
     tagline: string;
     intro: string;
     nav: NavItem[];

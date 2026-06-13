@@ -2,7 +2,6 @@ import type { PortfolioContent } from "@/types/portfolio-content";
 
 export const idPortfolioContent: PortfolioContent = {
     brand: "/assets/logo/logo-dark.png",
-    role: "Full-Stack | Pengembangan Web",
     tagline: "Saya Muhamad Jaelani.",
     intro:
         "Seorang insinyur fullstack yang mengkhususkan diri dalam pengembangan frontend, dengan semangat untuk menciptakan antarmuka pengguna yang intuitif dan pengalaman digital yang mulus. Dengan fondasi yang kuat dalam teknologi frontend dan backend, saya berkembang dalam menjembatani kesenjangan antara desain dan fungsionalitas untuk menciptakan aplikasi web yang berdampak.",
@@ -214,6 +213,13 @@ export const idPortfolioContent: PortfolioContent = {
         ctaDescription: "Mengubah ide berani menjadi realitas digital berkinerja tinggi. Mari buat sesuatu yang dapat diskalakan dan menginspirasi.",
         kickstartNow: "Mulai Sekarang",
         readyToChat: "Siap mengobrol? Respons dalam 24 jam.",
-        or: "ATAU"
+        or: "ATAU",
+        active: "Aktif",
+        footerDescription: "Membuat pengalaman digital berkinerja tinggi dengan presisi.",
+        menu: "Menu",
+        connect: "Hubungkan",
+        quickContact: "Kontak Cepat",
+        allRightsReserved: "Semua hak dilindungi undang-undang.",
+        backToTop: "Kembali ke atas"
     }
 };
