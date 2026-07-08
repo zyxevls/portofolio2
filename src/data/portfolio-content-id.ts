@@ -2,124 +2,111 @@ import type { PortfolioContent } from "@/types/portfolio-content";
 
 export const idPortfolioContent: PortfolioContent = {
     brand: "/assets/logo/logo-dark.png",
-    role: "Full-Stack | Pengembangan Web",
-    tagline: "Saya Muhamad Jaelani.",
+    role: "Full-Stack | Web Developer",
+    tagline: "Halo, aku Jaelani nih!",
     intro:
-        "Seorang insinyur fullstack yang mengkhususkan diri dalam pengembangan frontend, dengan semangat untuk menciptakan antarmuka pengguna yang intuitif dan pengalaman digital yang mulus. Dengan fondasi yang kuat dalam teknologi frontend dan backend, saya berkembang dalam menjembatani kesenjangan antara desain dan fungsionalitas untuk menciptakan aplikasi web yang berdampak.",
+        "Fullstack developer yang jatuh cinta sama dunia frontend, hobi banget bikin UI yang enak dilihat dan gampang dipake. Kuat di frontend maupun backend, dan paling suka bikin web yang kenceng tapi tetep halus pas dipake.",
+    highlights: [
+        { title: "React" },
+        { title: "TypeScript" },
+        { title: "Next.js" },
+        { title: "Node.js" },
+        { title: "Tailwind" }
+    ],
     nav: [
-        { label: "Ringkasan", href: "#overview" },
-        { label: "Proyek", href: "#projects" },
-        { label: "Keahlian", href: "#skills" },
+        { label: "Tentang", href: "#overview" },
+        { label: "Jasa", href: "#services" },
+        { label: "Skill", href: "#skills" },
+        { label: "Project", href: "#projects" },
         { label: "Kontak", href: "#contact" }
     ],
     stats: [
-        { value: "2+", label: "Tahun Pengalaman" },
-        { value: "4+", label: "Klien Puas" },
-        { value: "20+", label: "Teknologi Digunakan" },
-        { value: "10+", label: "Proyek Selesai" }
+        { value: "2+", label: "Pengalaman" },
+        { value: "4+", label: "Klien Happy" },
+        { value: "20+", label: "Tech yang Dipake" },
+        { value: "10+", label: "Project Kelar" }
     ],
-    highlights: [
-        {
-            title: "Sistem Komposabel",
-            description: "Primitif yang selaras dengan Shadcn dengan varian yang dapat diprediksi dan token bersama.",
-            icon: "layout-grid"
-        },
-        {
-            title: "Pengiriman Aman Tipe",
-            description: "Arsitektur TypeScript yang mengutamakan domain yang berskala tanpa ketergantungan UI.",
-            icon: "shield-check"
-        },
-        {
-            title: "Gerakan dengan Batasan",
-            description: "Transisi Framer Motion yang disetel untuk keterbacaan, bukan gangguan visual.",
-            icon: "sparkles"
-        },
-        {
-            title: "Pola Pikir Performa",
-            description: "Aset yang dioptimalkan, keputusan runtime yang lebih ringan, dan metrik UX praktis.",
-            icon: "zap"
-        }
-    ],
+
     services: [
         {
-            title: "Pengembangan Web",
-            description: "Saya membangun situs web modern dan responsif yang terlihat bagus di perangkat apa pun dan membantu Anda menjangkau lebih banyak pelanggan online.",
+            title: "Web Developer",
+            description: "Bikin web kekinian yang responsif, cakep di layar kapan aja, dan bikin kamu makin gampang dikenal orang online.",
             icon: "code2"
         },
         {
-            title: "Pengembangan Aplikasi",
-            description: "Menciptakan aplikasi seluler dan web yang kuat yang disesuaikan dengan kebutuhan bisnis dan persyaratan pengguna Anda.",
+            title: "Bikin Aplikasi",
+            description: "Bikin aplikasi web & mobile yang kuat, disesuaikan sama kebutuhan bisnis dan user kamu.",
             icon: "laptop"
         },
         {
             title: "Desain UI/UX",
-            description: "Merancang antarmuka yang bersih dan ramah pengguna yang membuat produk digital Anda mudah dan menyenangkan untuk digunakan.",
+            description: "Racik tampilan yang bersih dan enak dipake biar produk digital kamu gampang & asik dipake.",
             icon: "palette"
         },
         {
             title: "Branding Digital",
-            description: "Membantu Anda membangun kehadiran online yang kuat dengan identitas visual yang unik dan pesan merek yang konsisten.",
+            description: "Bantu bangun image online yang kuat lewat identitas visual unik dan pesan brand yang konsisten.",
             icon: "sparkles"
         },
         {
             title: "E-commerce",
-            description: "Menyiapkan toko online yang aman dan efisien sehingga Anda dapat menjual produk dan layanan Anda ke dunia.",
+            description: "Siapin toko online yang aman & efisien biar kamu bisa jualan ke seluruh dunia.",
             icon: "rocket"
         },
         {
-            title: "Konsultasi Teknologi",
-            description: "Memberikan saran ahli tentang teknologi terbaik untuk digunakan pada proyek Anda guna memastikan keberhasilan jangka panjang.",
+            title: "Konsultasi Tech",
+            description: "Kasih saran expert soal tech terbaik buat project kamu biar awet dan sukses jangka panjang.",
             icon: "zap"
         }
     ],
     process: [
         {
-            title: "Perencanaan Strategis",
-            description: "Menyelami tujuan Anda untuk membuat peta jalan teknis yang memastikan setiap piksel memiliki tujuan.",
+            title: "Rencana Dulu",
+            description: "Kita gali dulu tujuan kamu biar tiap piksel punya makna dan nggak asal taruh.",
             icon: "sparkles"
         },
         {
             title: "Desain Kreatif",
-            description: "Membuat antarmuka yang modern dan intuitif yang tidak hanya terlihat memukau tetapi juga memberikan perjalanan pengguna yang mulus.",
+            description: "Bikin tampilan yang modis & intuitif, nggak cuma cakep tapi nyaman banget dipake.",
             icon: "palette"
         },
         {
-            title: "Pembangunan Presisi",
-            description: "Mengembangkan dengan kode yang bersih dan efisien menggunakan framework terbaru untuk menjamin performa tinggi dan skalabilitas.",
+            title: "Coding Presisi",
+            description: "Ngoding pake framework terbaru, clean & efisien biar kenceng dan gampang dikembangin.",
             icon: "laptop"
         },
         {
-            title: "Peluncuran Akhir",
-            description: "Pengujian dan optimasi yang ketat diikuti dengan peluncuran yang mulus untuk membawa visi Anda ke dunia digital.",
+            title: "Peluncuran",
+            description: "Test & optimasi sampe mateng, baru rilis mulus biar visi kamu hidup di dunia digital.",
             icon: "arrow-right"
         }
     ],
     testimonials: [
         {
-            quote: "Pengalamannya terasa halus dan cepat. Setiap bagian memiliki tujuan dan transisinya terasa premium.",
-            author: "Pemangku Kepentingan Proyek",
+            quote: "Rasanya halus banget dan kenceng. Tiap bagian ada fungsinya, transisinya terasa mewah.",
+            author: "Stakeholder Proyek",
             role: "Product Lead"
         },
         {
-            quote: "State hover dan gerakan membantu halaman terasa hidup tanpa menjadi mengganggu atau berisik.",
-            author: "Kolaborator Desain",
+            quote: "Efek hover & geraknya bikin halaman berasa hidup tanpa bikin pusing atau berisik.",
+            author: "Teman Desain",
             role: "UI Designer"
         },
         {
-            quote: "Bekerja dengan Muhamad adalah pengubah permainan. Perhatian terhadap detail pada UI sangat berkelas.",
+            quote: "Kerja bareng Jaelani itu game changer sih. Detail UI-nya rapi banget, kelas deh.",
             author: "Alex Rivera",
             role: "CEO di TechFlow"
         },
         {
-            quote: "Bakat langka yang memahami persyaratan estetika dan teknis dari aplikasi modern.",
+            quote: "Bakat langka yang paham sisi estetik & teknis app modern.",
             author: "Sarah Chen",
-            role: "Arsitek UX Senior"
+            role: "Senior UX Architect"
         }
     ],
     projects: [
         {
             title: "Penyegaran Platform Kampus",
-            description: "Arsitektur situs web pendidikan yang dimodernisasi dengan fokus pada hierarki informasi dan navigasi cepat.",
+            description: "Desain ulang web sekolah biar lebih modern, fokus ke info yang jelas dan navigasi yang cepet.",
             image: "/img/web-smkn1rks-home.webp",
             href: "https://smkn1rangkasbitung.sch.id/",
             stack: ["React", "TypeScript", "Tailwind"],
@@ -127,7 +114,7 @@ export const idPortfolioContent: PortfolioContent = {
         },
         {
             title: "Konsol Galeri Realtime",
-            description: "Konsep dasbor untuk ingesti media langsung, alur moderasi, dan cuplikan analitik.",
+            description: "Konsep dashboard buat upload media real-time, alur moderasi, plus ringkasan analitik.",
             image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=1400",
             href: "#contact",
             stack: ["Supabase", "Realtime", "UI Architecture"],
@@ -135,7 +122,7 @@ export const idPortfolioContent: PortfolioContent = {
         },
         {
             title: "Workbench Metrik Operasi",
-            description: "Permukaan produk padat data yang menyeimbangkan penemuan, presisi, dan alur kerja yang mengutamakan keyboard.",
+            description: "Produk padat data yang seimbang antara eksplorasi, akurasi, dan alur kerja pakai keyboard.",
             image: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?q=80&w=1400",
             href: "#contact",
             stack: ["Charts", "State Modeling", "A11y"],
@@ -144,22 +131,22 @@ export const idPortfolioContent: PortfolioContent = {
     ],
     skills: [
         {
-            title: "Rekayasa Frontend",
+            title: "Frontend",
             icon: "laptop",
             skills: ["React", "TypeScript", "Vite", "Tailwind CSS", "Framer Motion"]
         },
         {
-            title: "Integrasi Backend",
+            title: "Backend",
             icon: "server",
             skills: ["Node.js", "REST APIs", "Supabase", "Authentication"]
         },
         {
-            title: "Data dan Penyimpanan",
+            title: "Data & Storage",
             icon: "database",
             skills: ["PostgreSQL", "MySQL", "Prisma", "Data Modeling"]
         },
         {
-            title: "Produk dan Desain",
+            title: "Produk & Desain",
             icon: "palette",
             skills: ["Figma", "Design Systems", "UX Writing", "Interaction Design"]
         }
@@ -170,50 +157,57 @@ export const idPortfolioContent: PortfolioContent = {
         { label: "Email", href: "mailto:hello@example.com", icon: "mail" }
     ],
     common: {
-        availableForWork: "Siap untuk bekerja",
-        downloadCv: "Unduh CV",
-        letsTalk: "Hubungi Saya",
-        navigation: "Navigasi",
-        myExpertise: "Keahlian Saya",
-        myQualityServices: "Layanan Berkualitas Saya",
-        servicesDescription: "Kami menuangkan ide dan keinginan Anda ke dalam bentuk proyek web unik yang menginspirasi Anda dan pelanggan Anda.",
-        learnMore: "Pelajari Lebih Lanjut",
-        ourWorkflow: "Alur Kerja Kami",
+        availableForWork: "Lagi open nih",
+        downloadCv: "Download CV",
+        letsTalk: "Yuk Ngobrol",
+        navigation: "Menu Navigasi",
+        myExpertise: "Skill Aku",
+        myQualityServices: "Jasa Andalan Aku",
+        servicesDescription: "Kita wujudin ide & keinginan kamu jadi project web kece yang bikin kamu & customermu terinspirasi.",
+        learnMore: "Cek Selengkapnya",
+        ourWorkflow: "Alur Kerja Kita",
         workingProcess: "Proses Kerja",
-        processDescription: "Pendekatan terstruktur untuk menghidupkan visi digital Anda dengan presisi dan kepedulian.",
-        myTestimonials: "Testimoni Saya",
-        clientFeedback: "Umpan Balik Klien",
-        recentProjects: "Proyek Terbaru",
-        myWork: "Pekerjaan Saya",
-        professionalSkills: "Keahlian Profesional",
-        techStack: "Tumpukan Teknologi",
-        techStackDescription: "Memanfaatkan alat dan bahasa terkemuka di industri untuk membangun pengalaman digital yang kuat, terukur, dan dioptimalkan untuk performa.",
-        builtWith: "Dibangun dengan",
-        modernTech: "Teknologi Modern",
-        getInTouch: "Hubungi Kami",
-        contactDescription: "Punya proyek dalam pikiran? Mari diskusikan bagaimana kita bisa membangun sesuatu yang luar biasa bersama.",
-        hireMe: "Pekerjakan Saya",
-        letsBuildSomething: "Mari Bangun Sesuatu yang Berguna",
-        contactSummary: "Terbuka untuk freelance dan kolaborasi produk jangka panjang. Saya dapat membantu Anda mengirimkan antarmuka yang halus dengan arsitektur yang kuat.",
-        whatYouGet: "Apa yang Anda dapatkan",
+        processDescription: "Cara kita yang teratur buat mewujudin visi digital kamu dengan teliti.",
+        myTestimonials: "Testimoni",
+        clientFeedback: "Kata Klien",
+        recentProjects: "Project Terbaru",
+        myWork: "Karya Aku",
+        professionalSkills: "Skill Profesional",
+        techStack: "Tech Stack",
+        techStackDescription: "Pake tool & bahasa kece di industri buat bangun pengalaman digital yang kuat, terukur, dan kenceng.",
+        builtWith: "Dibangun pake",
+        modernTech: "Tech Modern",
+        getInTouch: "Hubungi Aku",
+        contactDescription: "Punya ide project? Yuk obrolin gimana kita bisa bangun sesuatu yang keren bareng.",
+        hireMe: "Hire Me",
+        letsBuildSomething: "Mari Bangun Sesuatu yang Keren",
+        contactSummary: "Open buat freelance & kolaborasi jangka panjang. Aku bantu kirim UI yang halus dengan arsitektur yang kuat.",
+        whatYouGet: "Yang Kamu Dapet",
         productionReady: "Frontend React siap produksi",
-        strongUx: "UX yang kuat dan sistem responsif",
-        maintainableCode: "Codebase yang mudah dipelihara dan terukur",
-        projectInquiry: "Formulir Pertanyaan Proyek",
-        projectGoals: "Bagikan tujuan proyek Anda dan saya akan menghubungi Anda dengan cepat.",
-        yourName: "Nama Anda",
-        emailAddress: "Alamat Email",
-        howCanIHelp: "Bagaimana saya bisa membantu Anda?",
+        strongUx: "UX kuat & sistem responsif",
+        maintainableCode: "Codebase yang rapi & gampang dikembangin",
+        projectInquiry: "Form Pertanyaan Project",
+        projectGoals: "Share tujuan project kamu, nanti aku hubungi cepet.",
+        yourName: "Nama Kamu",
+        emailAddress: "Email Kamu",
+        howCanIHelp: "Ada yang bisa aku bantu?",
         sendMessage: "Kirim Pesan",
-        readyToStart: "SIAP MEMULAI",
-        yourProject: "PROYEK ANDA?",
+        readyToStart: "SIAP MULAI",
+        yourProject: "PROJECT KAMU?",
         collaborate: "Kolaborasi",
-        letsBuild: "Mari bangun",
+        letsBuild: "Yuk bangun",
         theFuture: "masa depan",
-        together: "bersama.",
-        ctaDescription: "Mengubah ide berani menjadi realitas digital berkinerja tinggi. Mari buat sesuatu yang dapat diskalakan dan menginspirasi.",
-        kickstartNow: "Mulai Sekarang",
-        readyToChat: "Siap mengobrol? Respons dalam 24 jam.",
-        or: "ATAU"
+        together: "bareng.",
+        ctaDescription: "Ubah ide berani jadi realita digital yang kenceng. Yuk bikin yang scalable & inspiratif.",
+        kickstartNow: "Gas Sekarang",
+        readyToChat: "Siap ngobrol? Balas dalam 24 jam.",
+        or: "ATAU",
+        active: "Lagi Aktif",
+        footerDescription: "Bikin pengalaman digital kenceng dengan presisi.",
+        menu: "Menu",
+        connect: "Connect",
+        quickContact: "Kontak Cepat",
+        allRightsReserved: "Hak cipta dilindungi.",
+        backToTop: "Kembali ke atas"
     }
 };

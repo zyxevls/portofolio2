@@ -1,198 +1,200 @@
-import { motion, AnimatePresence } from "framer-motion";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useLanguage } from "@/providers/language-provider";
 import { ArrowUpRight, ChevronLeft, ChevronRight } from "lucide-react";
 import useEmblaCarousel from "embla-carousel-react";
-import { useCallback, useEffect, useState } from "react";
+import { gsap, ScrollTrigger, animateHeading, parallaxY } from "@/lib/gsap-utils";
 
-// Project Card Component - Now Wide & Cinematic
-function ProjectCard({ project, isActive }: { project: any, isActive: boolean }) {
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const { currentTarget, clientX, clientY } = e;
-    const { left, top } = currentTarget.getBoundingClientRect();
-    currentTarget.style.setProperty("--mx", `${clientX - left}px`);
-    currentTarget.style.setProperty("--my", `${clientY - top}px`);
-  };
-
+function ProjectSlide({
+  project,
+  index,
+}: {
+  project: { title: string; description: string; image: string; href: string; stack: string[]; year: string };
+  index: number;
+}) {
   return (
-    <div className={`flex-[0_0_90vw] md:flex-[0_0_70vw] px-4 transition-all duration-1000 ${isActive ? "scale-100 opacity-100" : "scale-95 opacity-20 blur-sm"}`}>
-      <div
-        className="group relative h-[500px] w-full bg-card/60 dark:bg-white/5 border border-border/50 dark:border-white/10 backdrop-blur-md overflow-hidden rounded-[2.5rem] transition-all duration-700 flex flex-col shadow-2xl"
-        onMouseMove={handleMouseMove}
-        onMouseEnter={handleMouseMove}
-      >
-        <div className="absolute inset-0 -z-20">
+    <div className="group relative flex-[0_0_100%] min-w-0 pl-px md:flex-[0_0_88%] lg:flex-[0_0_76%] xl:flex-[0_0_68%]">
+      <article className="grid overflow-hidden border border-border bg-background lg:grid-cols-[1.1fr_0.9fr]">
+        {/* Image */}
+        <div className="relative bg-secondary min-h-72 lg:min-h-0">
           <img
             src={project.image}
             alt={project.title}
-            className="h-full w-full object-cover transition-transform duration-[2s] group-hover:scale-110"
+            className="h-full w-full object-cover grayscale transition duration-700 group-hover:grayscale-0 group-hover:scale-[1.03]"
+            loading="lazy"
           />
-          <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent z-0" />
-          <div className="absolute inset-0 bg-linear-to-r from-black/40 via-transparent to-transparent z-0" />
+          <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/15 to-transparent lg:bg-linear-to-r lg:from-black/40 lg:via-transparent lg:to-transparent" />
+
+          {/* Index badge */}
+          <div className="absolute left-5 top-5 flex items-center gap-2 border border-white/15 bg-black/40 px-3 py-1.5 backdrop-blur-sm">
+            <span className="text-[10px] font-mono uppercase tracking-[0.28em] text-white/80">
+              {String(index + 1).padStart(2, "0")}
+            </span>
+          </div>
+
+          {/* Year + drag hint */}
+          <div className="absolute bottom-5 left-5 flex flex-wrap gap-2">
+            <span className="border border-white/15 bg-black/30 px-3 py-1 text-[10px] font-mono uppercase tracking-widest text-white/70 backdrop-blur-sm">
+              {project.year}
+            </span>
+          </div>
         </div>
 
-        <div
-          className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10"
-          style={{
-            background: `radial-gradient(1000px circle at var(--mx, 0) var(--my, 0), rgba(var(--primary-rgb), 0.15), transparent 80%)`
-          }}
-        />
+        {/* Content */}
+        <div className="flex items-center bg-background border-t lg:border-t-0 lg:border-l border-border px-7 py-10 lg:px-10 lg:py-12">
+          <div className="max-w-xl">
+            <span className="mb-4 block text-[10px] font-mono uppercase tracking-[0.32em] text-muted-foreground">
+              Project {String(index + 1).padStart(2, "0")}
+            </span>
 
-        <div className="mt-auto p-8 md:p-12 relative z-10 flex flex-col md:flex-row md:items-end justify-between gap-8">
-          <div className="max-w-2xl">
-            <div className="flex items-center gap-4 mb-4">
-              <span className="px-3 py-1 rounded-lg bg-primary/20 backdrop-blur-xl text-[10px] font-bold text-primary uppercase tracking-[0.2em] border border-primary/20">
-                {project.year}
-              </span>
-              <div className="h-px w-12 bg-primary/30" />
-            </div>
-            <h3 className="text-4xl md:text-6xl font-black text-slate-900 dark:text-white mb-4 tracking-tighter leading-none drop-shadow-sm">
+            <h3 className="mb-5 font-display text-3xl leading-[0.95] tracking-tight text-foreground md:text-4xl">
               {project.title}
             </h3>
-            <div className="flex flex-wrap gap-3">
-              {project.stack.map((tech: string) => (
-                <span key={tech} className="text-[10px] font-bold text-slate-600 dark:text-white/50 uppercase tracking-widest bg-slate-100 dark:bg-white/5 px-2 py-1 rounded backdrop-blur-md border border-border/40 dark:border-transparent">
+
+            <p className="mb-7 text-xs leading-[1.9] text-muted-foreground font-mono">
+              {project.description}
+            </p>
+
+            {/* Stack pills */}
+            <div className="mb-8 flex flex-wrap gap-1.5">
+              {project.stack.map((tech) => (
+                <span
+                  key={tech}
+                  className="border border-border px-3 py-1 text-[10px] font-mono uppercase tracking-widest text-muted-foreground"
+                >
                   {tech}
                 </span>
               ))}
             </div>
-          </div>
 
-          <a
-            href={project.href}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group/btn h-20 w-20 rounded-full bg-white text-black flex items-center justify-center transition-all duration-500 hover:scale-110 hover:rotate-12 shadow-[0_0_30px_rgba(255,255,255,0.3)]"
-          >
-            <ArrowUpRight className="size-10 transition-transform duration-500 group-hover/btn:scale-110" />
-          </a>
+            <a
+              href={project.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 border-b border-foreground/30 pb-1 text-[10px] font-mono uppercase tracking-[0.28em] text-foreground transition-all duration-200 hover:gap-3 hover:border-foreground"
+            >
+              View Project
+              <ArrowUpRight size={12} />
+            </a>
+          </div>
         </div>
-      </div>
+      </article>
     </div>
   );
 }
 
 export function Projects() {
-  const { content, language } = useLanguage();
+  const { content } = useLanguage();
   const { projects } = content;
-  const extendedProjects = [...projects, ...projects, ...projects];
 
-  const [emblaRef, emblaApi] = useEmblaCarousel({
-    loop: true,
-    align: "center",
-    skipSnaps: false,
-    containScroll: false
-  });
+  const sectionRef  = useRef<HTMLElement>(null);
+  const gridRef     = useRef<HTMLDivElement>(null);
+  const headingRef  = useRef<HTMLHeadingElement>(null);
+  const lineRef     = useRef<HTMLDivElement>(null);
 
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, align: "start" });
   const [selectedIndex, setSelectedIndex] = useState(0);
 
-  const onSelect = useCallback(() => {
-    if (!emblaApi) return;
-    setSelectedIndex(emblaApi.selectedScrollSnap() % projects.length);
-  }, [emblaApi, projects.length]);
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+    const kills: (() => void)[] = [];
+
+    if (lineRef.current) {
+      gsap.set(lineRef.current, { scaleX: 0, transformOrigin: "left" });
+      const st = ScrollTrigger.create({
+        trigger: section,
+        start: "top 85%",
+        onEnter: () => gsap.to(lineRef.current, { scaleX: 1, duration: 0.8, ease: "power3.inOut" }),
+        once: true,
+      });
+      kills.push(() => st.kill());
+    }
+
+    kills.push(animateHeading(headingRef.current, { trigger: section }));
+    kills.push(parallaxY(gridRef.current, { yFactor: 0.15, trigger: section }));
+
+    return () => kills.forEach((k) => k());
+  }, []);
+
+  const scrollPrev = useCallback(() => emblaApi?.scrollPrev(), [emblaApi]);
+  const scrollNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi]);
+  const onSelect   = useCallback(() => {
+    if (emblaApi) setSelectedIndex(emblaApi.selectedScrollSnap());
+  }, [emblaApi]);
 
   useEffect(() => {
     if (!emblaApi) return;
     onSelect();
     emblaApi.on("select", onSelect);
+    return () => { emblaApi.off("select", onSelect); };
   }, [emblaApi, onSelect]);
 
-  const scrollPrev = useCallback(() => emblaApi && emblaApi.scrollPrev(), [emblaApi]);
-  const scrollNext = useCallback(() => emblaApi && emblaApi.scrollNext(), [emblaApi]);
-
-  const currentProject = projects[selectedIndex];
-
   return (
-    <section id="projects" className="relative h-screen min-h-[800px] flex items-center overflow-hidden bg-background">
-      {/* Background Projects Label */}
-      <div className="absolute top-10 left-10 text-[10vw] font-black text-foreground/3 dark:text-white/2 select-none pointer-events-none leading-none uppercase">
-        {content.common.recentProjects}
+    <section ref={sectionRef} id="projects" className="relative py-2 overflow-hidden">
+      {/* Parallax grid */}
+      <div ref={gridRef} className="parallax-layer absolute inset-0 -z-10 grid-bg opacity-60" aria-hidden />
+
+      {/* Section label + controls */}
+      <div className="flex items-center gap-4 pb-4 mb-10">
+        <div ref={lineRef} className="h-px flex-1 bg-border" />
+        <span className="text-[10px] font-mono text-muted-foreground uppercase tracking-[0.3em] shrink-0">
+          006 — {content.common.myWork}
+        </span>
       </div>
 
-      {/* Main Carousel Area */}
-      <div className="w-full">
-        <div className="overflow-visible" ref={emblaRef}>
-          <div className="flex">
-            {extendedProjects.map((project, index) => (
-              <ProjectCard
-                key={`${project.title}-${index}`}
-                project={project}
-                isActive={(index % projects.length) === selectedIndex}
-              />
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Overlaid UI - Modern App Layout */}
-      <div className="absolute top-0 right-0 h-full w-[350px] hidden xl:flex flex-col justify-between p-12 z-50 pointer-events-none">
-        {/* Side Info Panel */}
-        <div className="bg-card/80 dark:bg-background/20 backdrop-blur-3xl border border-border/50 dark:border-white/5 rounded-4xl p-8 mt-24 pointer-events-auto shadow-2xl">
-          <div className="flex items-center gap-3 text-primary font-bold uppercase tracking-[0.3em] text-[10px] mb-6">
-            <span className="h-px w-8 bg-primary" />
-            {language === "en" ? "Information" : "Informasi"}
-          </div>
-          <h2 className="font-display text-7xl font-black tracking-tighter text-foreground leading-[0.8] mb-10">
-            {content.common.myWork.split(" ").slice(0, -1).join(" ")} <br />
-            <span className="text-primary italic font-serif">{content.common.myWork.split(" ").slice(-1)}</span>
+      <div className="flex flex-col gap-5 mb-10 md:flex-row md:items-end md:justify-between">
+        <div className="max-w-2xl">
+          <h2
+            ref={headingRef}
+            data-text={content.common.myWork}
+            className="font-display text-4xl md:text-5xl leading-none text-foreground"
+          >
+            {content.common.myWork}
           </h2>
+        </div>
 
-          <div className="h-40">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={selectedIndex}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.5 }}
-                className="flex flex-col gap-4"
-              >
-                <div className="text-slate-900 dark:text-white font-bold text-sm tracking-tight border-l-2 border-primary pl-4 uppercase">
-                  {currentProject.title}
-                </div>
-                <p className="text-slate-700 dark:text-muted-foreground text-xs leading-relaxed font-medium">
-                  {currentProject.description}
-                </p>
-              </motion.div>
-            </AnimatePresence>
-          </div>
-
-          {/* Controls Integrated in Panel */}
-          <div className="flex items-center gap-4 mt-8 pt-8 border-t border-border/50 dark:border-white/5">
+        <div className="flex flex-col items-start gap-3 md:items-end">
+          <p className="max-w-xs text-xs leading-[1.8] text-muted-foreground md:text-right font-mono">
+            {content.common.recentProjects}
+          </p>
+          <div className="flex items-center gap-px">
             <button
               onClick={scrollPrev}
-              className="h-14 w-14 rounded-2xl border border-border/50 dark:border-white/10 bg-muted dark:bg-white/5 flex items-center justify-center transition-all hover:bg-primary hover:border-primary group"
+              aria-label="Previous project"
+              className="h-10 w-10 border border-border flex items-center justify-center text-foreground transition-all duration-200 hover:bg-foreground hover:text-background hover:border-foreground"
             >
-              <ChevronLeft className="size-6 text-foreground dark:text-white group-hover:scale-110 transition-transform" />
+              <ChevronLeft className="size-4" />
             </button>
             <button
               onClick={scrollNext}
-              className="h-14 w-14 rounded-2xl border border-border/50 dark:border-white/10 bg-muted dark:bg-white/5 flex items-center justify-center transition-all hover:bg-primary hover:border-primary group"
+              aria-label="Next project"
+              className="h-10 w-10 border border-border flex items-center justify-center text-foreground transition-all duration-200 hover:bg-foreground hover:text-background hover:border-foreground"
             >
-              <ChevronRight className="size-6 text-foreground dark:text-white group-hover:scale-110 transition-transform" />
+              <ChevronRight className="size-4" />
             </button>
           </div>
         </div>
       </div>
 
-      {/* Mobile/Tablet Controls Overlay */}
-      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex items-center gap-6 xl:hidden">
-        <button onClick={scrollPrev} className="h-16 w-16 rounded-full bg-white/10 backdrop-blur-xl border border-white/20 flex items-center justify-center">
-          <ChevronLeft className="size-8 text-white" />
-        </button>
-        <button onClick={scrollNext} className="h-16 w-16 rounded-full bg-white/10 backdrop-blur-xl border border-white/20 flex items-center justify-center">
-          <ChevronRight className="size-8 text-white" />
-        </button>
+      {/* Carousel */}
+      <div className="overflow-hidden border-l border-border" ref={emblaRef}>
+        <div className="flex items-stretch gap-px bg-border">
+          {projects.map((project, i) => (
+            <ProjectSlide key={project.title} project={project} index={i} />
+          ))}
+        </div>
       </div>
 
-      {/* Progress Bar (Bottom) */}
-      <div className="absolute bottom-0 left-0 w-full h-1 bg-white/5">
-        <motion.div
-          className="h-full bg-primary"
-          animate={{
-            width: `${((selectedIndex + 1) / projects.length) * 100}%`
-          }}
-          transition={{ type: "spring", stiffness: 100, damping: 20 }}
-        />
+      {/* Progress dots */}
+      <div className="mt-5 flex items-center gap-1">
+        {projects.map((_, i) => (
+          <button
+            key={i}
+            onClick={() => emblaApi?.scrollTo(i)}
+            aria-label={`Go to project ${i + 1}`}
+            className={`h-px rounded-full transition-all duration-300 ${i === selectedIndex ? "w-10 bg-foreground" : "w-5 bg-border hover:bg-muted-foreground"}`}
+          />
+        ))}
       </div>
     </section>
   );

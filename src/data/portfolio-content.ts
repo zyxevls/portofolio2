@@ -3,131 +3,118 @@ import type { PortfolioContent } from "@/types/portfolio-content";
 export const portfolioContent: PortfolioContent = {
     brand: "/assets/logo/logo-dark.png",
     role: "Full-Stack | Web Development",
-    tagline: "I am Muhamad Jaelani.",
+    tagline: "Hey, I'm Jaelani!",
     intro:
-        "A fullstack engineer specializing in frontend development, with a passion for crafting intuitive user interfaces and seamless digital experiences. With a strong foundation in both frontend and backend technologies, I thrive on bridging the gap between design and functionality to create impactful web applications.",
+        "Fullstack dev who's lowkey obsessed with frontend, and I genuinely love crafting UIs that are easy on the eyes and a breeze to use. Solid on both frontend and backend, and I'm all about shipping web apps that feel fast and smooth.",
+    highlights: [
+        { title: "React" },
+        { title: "TypeScript" },
+        { title: "Next.js" },
+        { title: "Node.js" },
+        { title: "Tailwind" }
+    ],
     nav: [
-        { label: "Overview", href: "#overview" },
-        { label: "Projects", href: "#projects" },
+        { label: "About", href: "#overview" },
+        { label: "Services", href: "#services" },
         { label: "Skills", href: "#skills" },
+        { label: "Projects", href: "#projects" },
         { label: "Contact", href: "#contact" }
     ],
     stats: [
-        { value: "2+", label: "Years of Experience" },
+        { value: "2+", label: "Years in the game" },
         { value: "4+", label: "Happy Clients" },
-        { value: "20+", label: "Tech Stack Used" },
-        { value: "10+", label: "Projects Completed" }
+        { value: "20+", label: "Tech I've used" },
+        { value: "10+", label: "Projects shipped" }
     ],
-    highlights: [
-        {
-            title: "Composable Systems",
-            description: "Shadcn-aligned primitives with predictable variants and shared tokens.",
-            icon: "layout-grid"
-        },
-        {
-            title: "Type-Safe Delivery",
-            description: "Domain-first TypeScript architecture that scales without UI coupling.",
-            icon: "shield-check"
-        },
-        {
-            title: "Motion with Restraint",
-            description: "Framer Motion transitions tuned for readability, not visual noise.",
-            icon: "sparkles"
-        },
-        {
-            title: "Performance Mindset",
-            description: "Optimized assets, lighter runtime decisions, and practical UX metrics.",
-            icon: "zap"
-        }
-    ],
+
     services: [
         {
             title: "Web Development",
-            description: "I build modern, responsive websites that look great on any device and help you reach more customers online.",
+            description: "I build modern, responsive sites that look dope on any device and help you pull in more people online.",
             icon: "code2"
         },
         {
             title: "App Development",
-            description: "Creating powerful mobile and web applications tailored to your business needs and user requirements.",
+            description: "Whipping up powerful mobile & web apps built around what your biz and users actually need.",
             icon: "laptop"
         },
         {
             title: "UI/UX Design",
-            description: "Designing clean, user-friendly interfaces that make your digital products easy and enjoyable to use.",
+            description: "Designing clean, friendly interfaces that make your digital product easy and fun to use.",
             icon: "palette"
         },
         {
             title: "Digital Branding",
-            description: "Helping you establish a strong online presence with unique visual identities and consistent brand messaging.",
+            description: "Helping you lock in a strong online presence with a unique visual vibe and consistent brand voice.",
             icon: "sparkles"
         },
         {
             title: "E-commerce",
-            description: "Setting up secure and efficient online stores so you can sell your products and services to the world.",
+            description: "Setting up secure, smooth online stores so you can sell your stuff to the whole world.",
             icon: "rocket"
         },
         {
             title: "Tech Consulting",
-            description: "Providing expert advice on the best technologies to use for your project to ensure long-term success.",
+            description: "Giving you the real advice on which tech fits your project best so it stays winning long-term.",
             icon: "zap"
         }
     ],
     process: [
         {
-            title: "Strategic Planning",
-            description: "Deep diving into your goals to create a technical roadmap that ensures every pixel serves a purpose.",
+            title: "Plan It Out",
+            description: "We dig into your goals first so every pixel actually means something.",
             icon: "sparkles"
         },
         {
             title: "Creative Design",
-            description: "Crafting modern, intuitive interfaces that not only look stunning but also provide a seamless user journey.",
+            description: "Crafting interfaces that are not just pretty but super intuitive and a joy to click through.",
             icon: "palette"
         },
         {
             title: "Precision Build",
-            description: "Developing with clean, efficient code using the latest frameworks to guarantee high performance and scalability.",
+            description: "Coding with clean, efficient stacks on the latest frameworks so it's fast and easy to scale.",
             icon: "laptop"
         },
         {
-            title: "Final Deployment",
-            description: "Rigorous testing and optimization followed by a smooth launch to bring your vision to the digital world.",
+            title: "Ship It",
+            description: "Testing and tuning till it's solid, then a smooth launch to bring your vision online.",
             icon: "arrow-right"
         }
     ],
     testimonials: [
         {
-            quote: "The experience feels polished and fast. Every section has a purpose and the transitions feel premium.",
+            quote: "It feels so polished and fast. Every section has a point, and the transitions feel premium.",
             author: "Project Stakeholder",
             role: "Product Lead"
         },
         {
-            quote: "The hover states and motion help the page feel alive without becoming distracting or noisy.",
+            quote: "The hover states and motion make the page feel alive without being loud or distracting.",
             author: "Design Collaborator",
             role: "UI Designer"
         },
         {
-            quote: "Working with Muhamad was a game-changer. The attention to detail in the UI is top-notch.",
+            quote: "Working with Jaelani was a total game-changer. The UI detail is next-level, no cap.",
             author: "Alex Rivera",
             role: "CEO at TechFlow"
         },
         {
-            quote: "A rare talent that understands both the aesthetic and the technical requirements of modern apps.",
+            quote: "Rare talent who gets both the aesthetic and the technical side of modern apps.",
             author: "Sarah Chen",
             role: "Senior UX Architect"
         }
     ],
     projects: [
         {
-            title: "Campus Platform Refresh",
-            description: "A modernized educational website architecture focused on information hierarchy and fast navigation.",
-            image: "/img/web-smkn1rks-home.webp",
+            title: "SMKN 1 Rangkasbitung",
+            description: "Modernized the school’s website with a clean, responsive design that highlights academic excellence and community events.",
+            image: "/src/assets/projects/skensa.webp",
             href: "https://smkn1rangkasbitung.sch.id/",
-            stack: ["React", "TypeScript", "Tailwind"],
+            stack: ["Wordpress", "Elementor", "Bootstrap CSS"],
             year: "2026"
         },
         {
             title: "Realtime Gallery Console",
-            description: "A dashboard concept for live media ingestion, moderation flow, and analytics snapshots.",
+            description: "A dashboard concept for live media uploads, moderation flow, and quick analytics snapshots.",
             image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=1400",
             href: "#contact",
             stack: ["Supabase", "Realtime", "UI Architecture"],
@@ -135,7 +122,7 @@ export const portfolioContent: PortfolioContent = {
         },
         {
             title: "Ops Metrics Workbench",
-            description: "Data-dense product surface balancing discoverability, precision, and keyboard-first workflows.",
+            description: "A data-heavy product that balances exploration, accuracy, and keyboard-first workflows.",
             image: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?q=80&w=1400",
             href: "#contact",
             stack: ["Charts", "State Modeling", "A11y"],
@@ -144,22 +131,22 @@ export const portfolioContent: PortfolioContent = {
     ],
     skills: [
         {
-            title: "Frontend Engineering",
+            title: "Frontend",
             icon: "laptop",
             skills: ["React", "TypeScript", "Vite", "Tailwind CSS", "Framer Motion"]
         },
         {
-            title: "Backend Integration",
+            title: "Backend",
             icon: "server",
             skills: ["Node.js", "REST APIs", "Supabase", "Authentication"]
         },
         {
-            title: "Data and Storage",
+            title: "Data & Storage",
             icon: "database",
             skills: ["PostgreSQL", "MySQL", "Prisma", "Data Modeling"]
         },
         {
-            title: "Product and Design",
+            title: "Product & Design",
             icon: "palette",
             skills: ["Figma", "Design Systems", "UX Writing", "Interaction Design"]
         }
@@ -170,40 +157,40 @@ export const portfolioContent: PortfolioContent = {
         { label: "Email", href: "mailto:hello@example.com", icon: "mail" }
     ],
     common: {
-        availableForWork: "Available for work",
+        availableForWork: "I'm open!",
         downloadCv: "Download CV",
-        letsTalk: "Let's Talk",
-        navigation: "Navigation",
-        myExpertise: "My Expertise",
-        myQualityServices: "My Quality Services",
-        servicesDescription: "We put your ideas and thus your wishes in the form of a unique web project that inspires you and your customers.",
-        learnMore: "Learn More",
+        letsTalk: "Let's Chat",
+        navigation: "Nav",
+        myExpertise: "My Skills",
+        myQualityServices: "My Go-To Services",
+        servicesDescription: "We turn your ideas and wishes into a unique web project that hypes you and your customers up.",
+        learnMore: "Check it out",
         ourWorkflow: "Our Workflow",
-        workingProcess: "Working Process",
-        processDescription: "A structured approach to bringing your digital vision to life with precision and care.",
-        myTestimonials: "My Testimonials",
-        clientFeedback: "Client Feedback",
+        workingProcess: "How I Work",
+        processDescription: "My organized way of bringing your digital vision to life with care.",
+        myTestimonials: "Testimonials",
+        clientFeedback: "What Clients Say",
         recentProjects: "Recent Projects",
         myWork: "My Work",
         professionalSkills: "Professional Skills",
-        techStack: "Technology Stack",
-        techStackDescription: "Leveraging industry-leading tools and languages to build robust, scalable, and performance-optimized digital experiences.",
+        techStack: "Tech Stack",
+        techStackDescription: "Using top-tier tools and languages to build digital experiences that are solid, scalable, and fast.",
         builtWith: "Built with",
         modernTech: "Modern Tech",
-        getInTouch: "Get In Touch",
-        contactDescription: "Have a project in mind? Let's discuss how we can build something amazing together.",
+        getInTouch: "Hit Me Up",
+        contactDescription: "Got a project in mind? Let's talk about building something cool together.",
         hireMe: "Hire Me",
-        letsBuildSomething: "Let's Build Something Useful",
-        contactSummary: "Open for freelance and long-term product collaboration. I can help you ship polished interfaces with strong architecture.",
+        letsBuildSomething: "Let's Build Something Cool",
+        contactSummary: "Open for freelance and long-term collabs. I'll help you ship clean UIs on solid architecture.",
         whatYouGet: "What you get",
         productionReady: "Production-ready React frontend",
         strongUx: "Strong UX and responsive system",
-        maintainableCode: "Maintainable, scalable codebase",
+        maintainableCode: "Clean, scalable codebase",
         projectInquiry: "Project Inquiry Form",
-        projectGoals: "Share your project goals and I will get back to you quickly.",
+        projectGoals: "Drop your project goals and I'll hit you back quick.",
         yourName: "Your Name",
-        emailAddress: "Email Address",
-        howCanIHelp: "How can I help you?",
+        emailAddress: "Your Email",
+        howCanIHelp: "How can I help?",
         sendMessage: "Send Message",
         readyToStart: "READY TO START",
         yourProject: "YOUR PROJECT?",
@@ -211,12 +198,12 @@ export const portfolioContent: PortfolioContent = {
         letsBuild: "Let's build",
         theFuture: "the future",
         together: "together.",
-        ctaDescription: "Transforming bold ideas into high-performance digital reality. Let's create something that scales and inspires.",
-        kickstartNow: "Kickstart Now",
-        readyToChat: "Ready to chat? Response within 24h.",
+        ctaDescription: "Turning bold ideas into high-performance digital reality. Let's make something that scales and inspires.",
+        kickstartNow: "Let's Go",
+        readyToChat: "Down to chat? I reply within 24h.",
         or: "OR",
-        active: "Active",
-        footerDescription: "Crafting high-performance digital experiences with precision.",
+        active: "Online",
+        footerDescription: "Crafting fast digital experiences with precision.",
         menu: "Menu",
         connect: "Connect",
         quickContact: "Quick Contact",

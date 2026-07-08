@@ -32,13 +32,6 @@ export interface HeroStat
     label: string;
 }
 
-export interface Highlight
-{
-    title: string;
-    description: string;
-    icon: IconKey;
-}
-
 export interface ProjectItem
 {
     title: string;
@@ -90,9 +83,9 @@ export interface PortfolioContent
     role: string;
     tagline: string;
     intro: string;
+    highlights: { title: string }[];
     nav: NavItem[];
     stats: HeroStat[];
-    highlights: Highlight[];
     projects: ProjectItem[];
     skills: SkillGroup[];
     services: ServiceItem[];

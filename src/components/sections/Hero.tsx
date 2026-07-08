@@ -1,210 +1,253 @@
-import { motion, type Variants } from "framer-motion";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import { useEffect, useRef } from "react";
 import { useLanguage } from "@/providers/language-provider";
 import { Stats } from "./Stats";
 import { FileText, Github, Linkedin } from "lucide-react";
 import profileImage from "@/assets/me.webp";
+import
+{
+  gsap,
+  animateHeading,
+  revealScale,
+  addMagnetic,
+  parallaxY,
+} from "@/lib/gsap-utils";
 
-const containerVariants: Variants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-      delayChildren: 0.2,
-    },
-  },
-};
-
-const itemVariants: Variants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.6,
-      ease: "easeOut"
-    }
-  },
-};
-
-const cardHoverTilt = {
-  whileHover: {
-    y: -8,
-    scale: 1.02,
-    rotateX: 2,
-    rotateY: 2,
-    transition: { type: "spring", stiffness: 300, damping: 20 }
-  }
-} as const;
-
-const floatingAnimation: Variants = {
-  animate: {
-    y: [0, -15, 0],
-    transition: {
-      duration: 5,
-      repeat: Infinity,
-      ease: "easeInOut"
-    }
-  }
-};
-
-interface HeroProps {
+interface HeroProps
+{
   startStatsCount: boolean;
 }
 
-export function Hero({ startStatsCount }: HeroProps) {
-  const { content, language } = useLanguage();
+export function Hero({ startStatsCount }: HeroProps)
+{
+  const { content } = useLanguage();
 
-  const handleCardPointerMove = (event: React.MouseEvent<HTMLDivElement>) => {
-    const rect = event.currentTarget.getBoundingClientRect();
-    event.currentTarget.style.setProperty("--mx", `${event.clientX - rect.left}px`);
-    event.currentTarget.style.setProperty("--my", `${event.clientY - rect.top}px`);
-  };
+  const sectionRef = useRef<HTMLElement>(null);
+  const gridRef = useRef<HTMLDivElement>(null);
+  const taglineRef = useRef<HTMLDivElement>(null);
+  const headingRef = useRef<HTMLHeadingElement>(null);
+  const introRef = useRef<HTMLParagraphElement>(null);
+  const ctaRef = useRef<HTMLDivElement>(null);
+  const chipsRef = useRef<HTMLDivElement>(null);
+  const imageRef = useRef<HTMLDivElement>(null);
+  const badgeRef = useRef<HTMLDivElement>(null);
+  const cornerTLRef = useRef<HTMLDivElement>(null);
+  const cornerBRRef = useRef<HTMLDivElement>(null);
+  const ghBtnRef = useRef<HTMLAnchorElement>(null);
+  const liRef = useRef<HTMLAnchorElement>(null);
+  const cvBtnRef = useRef<HTMLAnchorElement>(null);
 
-  const handleCardPointerEnter = (event: React.MouseEvent<HTMLDivElement>) => {
-    const rect = event.currentTarget.getBoundingClientRect();
-    event.currentTarget.style.setProperty("--mx", `${event.clientX - rect.left}px`);
-    event.currentTarget.style.setProperty("--my", `${event.clientY - rect.top}px`);
-  };
+  useEffect(() =>
+  {
+    const kills: (() => void)[] = [];
+    const section = sectionRef.current;
+    if (!section) return;
+
+    // ── Entrance timeline ─────────────────────────────────────────────────
+    const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+
+    // Corner accent boxes
+    [cornerTLRef.current, cornerBRRef.current].forEach((el, i) =>
+    {
+      if (!el) return;
+      gsap.set(el, { opacity: 0, scale: 0.7 });
+      tl.to(el, { opacity: 1, scale: 1, duration: 0.5, ease: "back.out(1.5)" }, i * 0.1);
+    });
+
+    // Tagline badge
+    if (taglineRef.current) {
+      gsap.set(taglineRef.current, { opacity: 0, y: 12 });
+      tl.to(taglineRef.current, { opacity: 1, y: 0, duration: 0.45 }, 0.2);
+    }
+
+    // Heading word reveal
+    kills.push(animateHeading(headingRef.current, { delay: 0.35 }));
+
+    // Intro paragraph
+    if (introRef.current) {
+      gsap.set(introRef.current, { opacity: 0, y: 18 });
+      tl.to(introRef.current, { opacity: 1, y: 0, duration: 0.65 }, 0.75);
+    }
+
+    // CTA row
+    if (ctaRef.current) {
+      gsap.set(ctaRef.current, { opacity: 0, y: 14 });
+      tl.to(ctaRef.current, { opacity: 1, y: 0, duration: 0.55 }, 1.0);
+    }
+
+    // Chips
+    if (chipsRef.current) {
+      gsap.set(chipsRef.current, { opacity: 0, y: 10 });
+      tl.to(chipsRef.current, { opacity: 1, y: 0, duration: 0.5 }, 1.15);
+    }
+
+    // Profile image box reveal
+    kills.push(revealScale(imageRef.current, { delay: 0.3, duration: 1 }));
+
+    // Availability badge
+    if (badgeRef.current) {
+      gsap.set(badgeRef.current, { opacity: 0, y: 8, scale: 0.85 });
+      tl.to(badgeRef.current, { opacity: 1, scale: 1, y: 0, duration: 0.45, ease: "back.out(1.4)" }, 1.1);
+    }
+
+    // Grid parallax
+    kills.push(parallaxY(gridRef.current, { yFactor: 0.3 }));
+
+    // Magnetic social
+    kills.push(addMagnetic(ghBtnRef.current));
+    kills.push(addMagnetic(liRef.current));
+    kills.push(addMagnetic(cvBtnRef.current));
+
+    return () =>
+    {
+      kills.forEach((k) => k());
+      tl.kill();
+    };
+  }, []);
 
   return (
     <section
+      ref={sectionRef}
       id="overview"
-      className="relative w-full min-h-screen flex flex-col justify-center overflow-hidden py-24 md:py-32 lg:py-0"
+      className="relative w-full min-h-screen flex flex-col justify-center overflow-hidden py-28 md:py-36 lg:py-18"
     >
-      <div className="container mx-auto px-6 relative">
-        <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
-          <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            animate="visible"
-            className="flex flex-col items-center text-center lg:items-start lg:text-left z-20 relative order-2 lg:order-1"
-          >
-            <motion.div variants={itemVariants}>
-              <Badge variant="outline" className="mb-6 px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.3em] bg-primary/5 border-primary/20 text-primary rounded-full">
+      {/* ── Grid background parallax ── */}
+      <div
+        ref={gridRef}
+        className="parallax-layer absolute inset-0 -z-10 grid-bg opacity-100"
+        aria-hidden
+      />
+
+      {/* ── Corner accent boxes ── */}
+      <div ref={cornerTLRef} className="absolute top-8 left-8 hidden lg:block z-10 pointer-events-none" aria-hidden>
+        <div className="w-16 h-16 border border-border grid grid-cols-2 grid-rows-2">
+          <div className="border-r border-b border-border" />
+          <div className="border-b border-border" />
+          <div className="border-r border-border" />
+          <div />
+        </div>
+      </div>
+      <div ref={cornerBRRef} className="absolute bottom-12 right-8 hidden lg:block z-10 pointer-events-none" aria-hidden>
+        <div className="w-10 h-10 border border-border" />
+      </div>
+
+      <div className="container mx-auto px-6 relative z-10">
+        <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-20">
+
+          {/* ── Text column ── */}
+          <div className="flex flex-col items-center text-center lg:items-start lg:text-left order-2 lg:order-1">
+
+            {/* Tagline */}
+            <div ref={taglineRef} className="mb-6">
+              <span className="inline-flex items-center gap-2 px-3 py-1.5 border border-border text-[10px] font-mono uppercase tracking-[0.28em] text-muted-foreground">
+                <span className="h-1.5 w-1.5 rounded-full bg-foreground" />
                 {content.role}
-              </Badge>
-            </motion.div>
+              </span>
+            </div>
 
-            <motion.h1
-              variants={itemVariants}
-              className="text-balance font-display text-4xl leading-[1.1] md:text-6xl lg:text-7xl font-black tracking-tight text-foreground mb-8"
+            {/* Heading */}
+            <h1
+              ref={headingRef}
+              data-text={content.tagline}
+              className="font-display text-5xl md:text-7xl lg:text-[5.5rem] leading-[0.95] tracking-tight text-foreground mb-8 font-black"
             >
-              {content.tagline.split(" ").map((word, i) => (
-                <span key={i} className={word.includes("Jaelani") ? "text-primary italic font-serif" : ""}>
-                  {word}{" "}
-                </span>
-              ))}
-            </motion.h1>
+              {content.tagline}
+            </h1>
 
-            <motion.p
-              variants={itemVariants}
-              className="max-w-[600px] text-base md:text-lg text-slate-600 dark:text-muted-foreground leading-relaxed font-medium mb-10"
+            {/* Intro */}
+            <p
+              ref={introRef}
+              className="max-w-[520px] text-[15px] text-muted-foreground leading-[1.85] mb-10"
             >
               {content.intro}
-            </motion.p>
+            </p>
 
-            <motion.div variants={itemVariants} className="flex flex-col sm:flex-row items-center gap-5 w-full sm:w-auto mb-12">
-              <motion.div
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                className="w-full sm:w-auto"
+            {/* CTA row */}
+            <div ref={ctaRef} className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto mb-10">
+              <a
+                ref={cvBtnRef}
+                href="/src/assets/cv.pdf"
+                download="CV - Muhamad Jaelani"
+                className="inline-flex items-center gap-2 h-11 px-7 bg-foreground text-background text-xs font-mono uppercase tracking-widest hover:opacity-80 transition-opacity w-full sm:w-auto justify-center"
               >
-                <Button size="lg" className="h-14 px-10 text-base font-bold w-full sm:w-auto rounded-2xl shadow-lg shadow-primary/20 transition-all hover:shadow-primary/30" asChild>
-                  <a href="/src/assets/cv.pdf" download="CV - Muhamad Jaelani">
-                    {content.common.downloadCv}
-                    <FileText size={18} className="ml-2" />
-                  </a>
-                </Button>
-              </motion.div>
-
-              <div className="flex gap-4">
-                <motion.div whileHover={{ y: -4 }} whileTap={{ scale: 0.9 }}>
-                  <Button size="lg" variant="outline" className="h-14 w-14 p-0 rounded-2xl border-border/60 bg-background/50 backdrop-blur-md hover:bg-primary/5 hover:border-primary/30" asChild>
-                    <a href="https://github.com/zyxevls" target="_blank" aria-label="GitHub"><Github size={22} /></a>
-                  </Button>
-                </motion.div>
-                <motion.div whileHover={{ y: -4 }} whileTap={{ scale: 0.9 }}>
-                  <Button size="lg" variant="outline" className="h-14 w-14 p-0 rounded-2xl border-border/60 bg-background/50 backdrop-blur-md hover:bg-primary/5 hover:border-primary/30" asChild>
-                    <a href="https://www.linkedin.com/" target="_blank" aria-label="LinkedIn"><Linkedin size={22} /></a>
-                  </Button>
-                </motion.div>
-              </div>
-            </motion.div>
-
-            <motion.div variants={itemVariants} className="flex flex-wrap items-center justify-center lg:justify-start gap-3 max-w-md">
-              {(language === "en" ? [
-                "Full-Stack Precision",
-                "Type-Safe Development",
-                "Performance-First UX"
-              ] : [
-                "Presisi Full-Stack",
-                "Pengembangan Tipe-Aman",
-                "UX Mengutamakan Performa"
-              ]).map((chip) => (
-                <div
-                  key={chip}
-                  className="rounded-full px-4 py-2 text-[10px] font-bold uppercase tracking-widest bg-secondary/40 dark:bg-secondary/10 border border-border/50 text-slate-600 dark:text-secondary-foreground backdrop-blur-sm"
+                <FileText size={13} />
+                {content.common.downloadCv}
+              </a>
+              <div className="flex gap-2">
+                <a
+                  ref={ghBtnRef}
+                  href="https://github.com/zyxevls"
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="GitHub"
+                  className="inline-flex items-center justify-center h-11 w-11 border border-border hover:bg-foreground hover:text-background hover:border-foreground transition-all duration-150"
                 >
-                  {chip}
-                </div>
+                  <Github size={16} />
+                </a>
+                <a
+                  ref={liRef}
+                  href="https://www.linkedin.com/"
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="LinkedIn"
+                  className="inline-flex items-center justify-center h-11 w-11 border border-border hover:bg-foreground hover:text-background hover:border-foreground transition-all duration-150"
+                >
+                  <Linkedin size={16} />
+                </a>
+              </div>
+            </div>
+
+            {/* Tech chips */}
+            <div ref={chipsRef} className="flex flex-wrap items-center justify-center lg:justify-start gap-1.5 max-w-md">
+              {content.highlights.map((h) => (
+                <span
+                  key={h.title}
+                  className="px-3 py-1 border border-border text-[10px] font-mono uppercase tracking-widest text-muted-foreground hover:border-foreground hover:text-foreground transition-colors duration-150 cursor-default"
+                >
+                  {h.title}
+                </span>
               ))}
-            </motion.div>
-          </motion.div>
+            </div>
+          </div>
 
-          {/* Image Content */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
-            className="relative flex justify-center lg:justify-end order-1 lg:order-2 mb-8 lg:mb-0"
-          >
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 -z-10 h-[120%] w-[120%] bg-primary/10 blur-[100px] rounded-full opacity-40 animate-pulse" />
+          {/* ── Image column ── */}
+          <div className="relative flex justify-center lg:justify-end order-1 lg:order-2">
+            <div ref={imageRef} className="relative w-full max-w-[340px] md:max-w-[420px]">
+              {/* Offset box accent */}
+              <div className="absolute -top-3 -left-3 w-full h-full border border-border pointer-events-none z-0" aria-hidden />
+              <div className="absolute -bottom-3 -right-3 w-full h-full border border-border pointer-events-none z-0" aria-hidden />
 
-            <motion.div
-              variants={floatingAnimation}
-              animate="animate"
-              className="relative w-full max-w-[360px] md:max-w-[420px] aspect-square"
-            >
-              <div
-                className="lux-card w-full h-full relative rounded-3xl overflow-hidden border border-border/50 bg-card/20 backdrop-blur-xl group"
-                onMouseEnter={handleCardPointerEnter}
-                onMouseMove={handleCardPointerMove}
-              >
-                <div className="w-full h-full relative overflow-hidden">
-                  <motion.img
-                    src={profileImage}
-                    alt="Muhamad Jaelani"
-                    className="h-full w-full object-cover grayscale transition-all duration-1000 group-hover:grayscale-0 group-hover:scale-105"
-                    loading="eager"
-                    fetchPriority="high"
-                  />
-                  <div className="absolute inset-0 bg-linear-to-t from-background/40 to-transparent opacity-60" />
-                </div>
+              {/* Image box */}
+              <div className="relative overflow-hidden aspect-4/5 border border-border bg-secondary z-10 group">
+                <img
+                  src={profileImage}
+                  alt="Muhamad Jaelani"
+                  className="h-full w-full object-cover grayscale transition-all duration-700 group-hover:grayscale-0 group-hover:scale-[1.04]"
+                  loading="eager"
+                  fetchPriority="high"
+                />
+                {/* Overlay */}
+                <div className="absolute inset-0 bg-linear-to-t from-black/25 to-transparent" />
               </div>
 
-              <motion.div
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 1, duration: 0.6, ease: "easeOut" }}
-                className="absolute -bottom-4 -right-4 bg-background/90 backdrop-blur-xl border border-border/60 p-4 rounded-2xl shadow-xl z-20 flex items-center gap-3"
+              {/* Availability badge */}
+              <div
+                ref={badgeRef}
+                className="absolute -bottom-5 -right-5 z-20 border border-border bg-background px-4 py-2.5 flex items-center gap-2.5 shadow-sm"
               >
-                <div className="h-3 w-3 rounded-full bg-green-500 animate-pulse" />
-                <span className="text-[11px] font-bold uppercase tracking-widest">{content.common.availableForWork}</span>
-              </motion.div>
-            </motion.div>
-          </motion.div>
+                <span className="h-2 w-2 rounded-full bg-foreground animate-pulse" />
+                <span className="text-[10px] font-mono uppercase tracking-[0.25em]">
+                  {content.common.availableForWork}
+                </span>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div className="mt-16 lg:mt-24">
+        {/* ── Stats row ── */}
+        <div className="mt-20 lg:mt-28">
           <Stats startStatsCount={startStatsCount} />
         </div>
       </div>
     </section>
   );
 }
-
-

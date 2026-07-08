@@ -1,174 +1,159 @@
-import { motion, useMotionValue, useMotionTemplate } from "framer-motion";
+import { useEffect, useRef } from "react";
 import { useLanguage } from "@/providers/language-provider";
+import { gsap, ScrollTrigger, animateHeading, staggerReveal, revealFade, parallaxY } from "@/lib/gsap-utils";
 
-const languages = [
-  { name: "HTML5", slug: "html5" },
-  { name: "CSS3", slug: "css" },
-  { name: "JavaScript", slug: "javascript" },
-  { name: "TypeScript", slug: "typescript" },
-  { name: "Python", slug: "python" },
-  { name: "Go", slug: "go" },
-  { name: "PHP", slug: "php" },
-  { name: "SQL", slug: "postgresql" },
-  { name: "Dart", slug: "dart" },
-  { name: "Kotlin", slug: "kotlin" },
-  { name: "Rust", slug: "rust" },
-  { name: "Bash", slug: "gnubash" },
-  { name: "Arduino", slug: "arduino" },
+const allTech = [
+  { name: "React",       slug: "react" },
+  { name: "TypeScript",  slug: "typescript" },
+  { name: "Next.js",     slug: "nextdotjs" },
+  { name: "Tailwind",    slug: "tailwindcss" },
+  { name: "Node.js",     slug: "nodedotjs" },
+  { name: "Laravel",     slug: "laravel" },
+  { name: "Supabase",    slug: "supabase" },
+  { name: "Docker",      slug: "docker" },
+  { name: "PostgreSQL",  slug: "postgresql" },
+  { name: "Figma",       slug: "figma" },
+  { name: "Git",         slug: "git" },
+  { name: "Python",      slug: "python" },
+  { name: "Vue",         slug: "vuedotjs" },
+  { name: "NestJS",      slug: "nestjs" },
+  { name: "Nuxt",        slug: "nuxt" },
+  { name: "Go",          slug: "go" },
+  { name: "PHP",         slug: "php" },
+  { name: "Bun",         slug: "bun" },
+  { name: "Svelte",      slug: "svelte" },
+  { name: "Postman",     slug: "postman" },
 ];
 
-const tools = [
-  { name: "React", slug: "react" },
-  { name: "Next", slug: "nextdotjs" },
-  { name: "Vue", slug: "vuedotjs" },
-  { name: "Laravel", slug: "laravel" },
-  { name: "Codeigniter", slug: "codeigniter" },
-  { name: "Nestjs", slug: "nestjs" },
-  { name: "Nuxt", slug: "nuxt" },
-  { name: "Express", slug: "express" },
-  { name: "Svelte", slug: "svelte" },
-  { name: "Tailwind", slug: "tailwindcss" },
-  { name: "Node.js", slug: "nodedotjs" },
-  { name: "Bun", slug: "bun" },
-  { name: "Supabase", slug: "supabase" },
-  { name: "Docker", slug: "docker" },
-  { name: "Git", slug: "git" },
-  { name: "Shadcn UI", slug: "shadcnui" },
-  { name: "ReactQuery", slug: "reactquery" },
-  { name: "Postman", slug: "postman" }
-];
-
-function TechPod({ tech, rotateDir = 1 }: { tech: { name: string; slug: string }, rotateDir?: number }) {
-  function handleMouseMove(e: React.MouseEvent<HTMLDivElement>) {
-    const { currentTarget, clientX, clientY } = e;
-    const { left, top } = currentTarget.getBoundingClientRect();
-    const x = clientX - left;
-    const y = clientY - top;
-    currentTarget.style.setProperty("--mx", `${x}px`);
-    currentTarget.style.setProperty("--my", `${y}px`);
-  }
-
+function TechPill({ tech }: { tech: { name: string; slug: string } }) {
   return (
-    <div 
-      className="group relative lux-card rounded-3xl"
-      onMouseMove={handleMouseMove}
-      onMouseEnter={handleMouseMove}
-    >
-      <div className="flex items-center gap-4 px-8 py-4 rounded-3xl bg-card/60 dark:bg-white/5 border border-border/50 dark:border-white/10 backdrop-blur-xl hover:bg-primary/5 dark:hover:bg-primary/10 hover:border-primary/40 transition-all duration-700 shadow-xl dark:shadow-black/20 overflow-hidden">
-        {/* Colorful Spotlight Overlay using synced CSS Variables */}
-        <div
-          className="pointer-events-none absolute -inset-px rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-          style={{
-            background: `radial-gradient(350px circle at var(--mx, 0) var(--my, 0), rgba(var(--primary-rgb), 0.15), rgba(0, 255, 255, 0.05) 40%, transparent 80%)`
-          }}
-        />
-        
-        <div className={`h-10 w-10 grayscale opacity-40 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500 transform group-hover:scale-110 ${rotateDir > 0 ? 'group-hover:rotate-6' : 'group-hover:-rotate-6'}`}>
-          <img
-            src={`https://cdn.simpleicons.org/${tech.slug}`}
-            alt={tech.name}
-            className="h-full w-full object-contain"
-          />
-        </div>
-        <span className="text-sm font-bold tracking-tight text-muted-foreground group-hover:text-foreground transition-colors">
-          {tech.name}
-        </span>
-      </div>
-    </div>
+    <span className="group inline-flex items-center gap-2 px-4 py-2 border border-border text-[10px] font-mono text-muted-foreground hover:bg-foreground hover:text-background hover:border-foreground transition-all duration-150 cursor-default shrink-0 select-none">
+      <img
+        src={`https://cdn.simpleicons.org/${tech.slug}/808080`}
+        alt=""
+        aria-hidden
+        className="h-3 w-3 group-hover:brightness-0 group-hover:invert transition-all duration-150"
+        loading="lazy"
+      />
+      {tech.name}
+    </span>
   );
 }
 
 export function TechStack() {
   const { content } = useLanguage();
+
+  const sectionRef  = useRef<HTMLElement>(null);
+  const gridRef     = useRef<HTMLDivElement>(null);
+  const headingRef  = useRef<HTMLHeadingElement>(null);
+  const marqueeRef  = useRef<HTMLDivElement>(null);
+  const skillRefs   = useRef<(HTMLDivElement | null)[]>([]);
+  const lineRef     = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+    const kills: (() => void)[] = [];
+
+    if (lineRef.current) {
+      gsap.set(lineRef.current, { scaleX: 0, transformOrigin: "left" });
+      const st = ScrollTrigger.create({
+        trigger: section,
+        start: "top 85%",
+        onEnter: () => gsap.to(lineRef.current, { scaleX: 1, duration: 0.8, ease: "power3.inOut" }),
+        once: true,
+      });
+      kills.push(() => st.kill());
+    }
+
+    kills.push(animateHeading(headingRef.current, { trigger: section }));
+    kills.push(revealFade(marqueeRef.current, { trigger: section, delay: 0.1 }));
+    kills.push(staggerReveal(skillRefs.current, { trigger: section, stagger: 0.06, y: 12 }));
+    kills.push(parallaxY(gridRef.current, { yFactor: 0.15, trigger: section }));
+
+    return () => kills.forEach((k) => k());
+  }, []);
+
   return (
-    <section className="relative w-screen left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] overflow-hidden py-32 bg-background/50">
-      {/* Dynamic Mesh Gradients */}
-      <div className="absolute top-1/2 left-0 -translate-y-1/2 -z-10 h-[600px] w-[600px] bg-primary/10 blur-[160px] rounded-full opacity-40 animate-pulse" />
-      <div className="absolute top-0 right-0 -z-10 h-[500px] w-[500px] bg-cyan-500/5 blur-[140px] rounded-full" />
+    <section ref={sectionRef} id="skills" className="relative py-2 overflow-hidden">
+      {/* Parallax grid */}
+      <div ref={gridRef} className="parallax-layer absolute inset-0 -z-10 grid-bg opacity-60" aria-hidden />
 
-      <div className="container mx-auto px-6 relative">
-        <div className="flex flex-col lg:flex-row items-center gap-16 lg:gap-24">
-
-          {/* Left Side: Dynamic Marquees */}
-          <div className="w-full lg:w-[60%] flex flex-col gap-8 select-none order-2 lg:order-1">
-            {/* Languages Row */}
-            <div className="flex overflow-hidden mask-[linear-gradient(to_right,transparent,black_15%,black_85%,transparent)]">
-              <div className="flex animate-marquee-left gap-8 whitespace-nowrap py-4">
-                {languages.concat(languages).map((tech, i) => (
-                  <TechPod key={`lang-${i}`} tech={tech} rotateDir={1} />
-                ))}
-              </div>
-            </div>
-
-            {/* Tools Row */}
-            <div className="flex overflow-hidden mask-[linear-gradient(to_right,transparent,black_15%,black_85%,transparent)]">
-              <div className="flex animate-marquee-right gap-8 whitespace-nowrap py-4">
-                {tools.concat(tools).map((tech, i) => (
-                  <TechPod key={`tool-${i}`} tech={tech} rotateDir={-1} />
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* Right Side: Sophisticated Text Section */}
-          <div className="w-full lg:w-[40%] flex flex-col items-center lg:items-end text-center lg:text-right space-y-6 order-1 lg:order-2">
-            <div className="space-y-4">
-              <motion.div
-                initial={{ opacity: 0, x: 20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                className="px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-[10px] font-bold uppercase tracking-[0.4em] text-primary w-fit lg:ml-auto"
-              >
-                {content.common.techStack}
-              </motion.div>
-              <motion.h2
-                initial={{ opacity: 0, x: 20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.1 }}
-                className="font-display text-5xl md:text-6xl font-extrabold tracking-tighter leading-[0.9] text-foreground"
-              >
-                {content.common.builtWith} <br />
-                <span className="bg-linear-to-r from-primary to-cyan-400 bg-clip-text text-transparent">{content.common.modernTech}</span>
-              </motion.h2>
-            </div>
-
-            <motion.p
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.2 }}
-              className="text-base md:text-lg text-muted-foreground leading-relaxed max-w-sm lg:ml-auto font-medium"
-            >
-              {content.common.techStackDescription}
-            </motion.p>
-          </div>
-
-        </div>
+      {/* Section label */}
+      <div className="flex items-center gap-4 pb-4 mb-14">
+        <div ref={lineRef} className="h-px flex-1 bg-border" />
+        <span className="text-[10px] font-mono text-muted-foreground uppercase tracking-[0.3em] shrink-0">
+          004 — {content.common.techStack}
+        </span>
       </div>
 
-      <style dangerouslySetInnerHTML={{
-        __html: `
-        @keyframes marquee-left {
-          0% { transform: translateX(0); }
-          100% { transform: translateX(-50%); }
-        }
-        @keyframes marquee-right {
-          0% { transform: translateX(-50%); }
-          100% { transform: translateX(0); }
-        }
-        .animate-marquee-left {
-          animation: marquee-left 40s linear infinite;
-        }
-        .animate-marquee-right {
-          animation: marquee-right 50s linear infinite;
-        }
-        @media (max-width: 768px) {
-          .animate-marquee-left { animation-duration: 25s; }
-          .animate-marquee-right { animation-duration: 30s; }
-        }
-      `}} />
+      <div className="grid lg:grid-cols-2 gap-16 items-start">
+        {/* Left — heading + skill groups */}
+        <div className="flex flex-col gap-6">
+          <h2
+            ref={headingRef}
+            data-text={`${content.common.builtWith} ${content.common.modernTech}`}
+            className="font-display text-4xl md:text-5xl leading-none tracking-tight text-foreground"
+          >
+            {content.common.builtWith}
+            <br />
+            <em>{content.common.modernTech}</em>
+          </h2>
+          <p className="text-xs text-muted-foreground leading-[1.9] max-w-xs font-mono">
+            {content.common.techStackDescription}
+          </p>
+
+          {/* Skill groups — boxed rows */}
+          <div className="mt-4 border border-border">
+            {content.skills.map((group, i) => (
+              <div
+                key={group.title}
+                ref={(el) => { skillRefs.current[i] = el; }}
+                className="grid grid-cols-[100px_1fr] gap-6 px-5 py-4 border-b border-border last:border-0 hover:bg-secondary transition-colors duration-150"
+              >
+                <span className="text-[10px] font-mono text-muted-foreground uppercase tracking-widest pt-0.5 shrink-0">
+                  {group.title}
+                </span>
+                <div className="flex flex-wrap gap-x-3 gap-y-1">
+                  {group.skills.map((s) => (
+                    <span key={s} className="text-[11px] font-mono text-foreground">
+                      {s}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Right — scrolling marquee pills */}
+        <div ref={marqueeRef} className="flex flex-col gap-2.5 overflow-hidden">
+          {/* Row → */}
+          <div className="flex overflow-hidden mask-[linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]">
+            <div className="flex gap-2 whitespace-nowrap marquee-track">
+              {allTech.concat(allTech).slice(0, 28).map((t, i) => (
+                <TechPill key={`a${i}`} tech={t} />
+              ))}
+            </div>
+          </div>
+          {/* Row ← */}
+          <div className="flex overflow-hidden mask-[linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]">
+            <div className="flex gap-2 whitespace-nowrap marquee-track-rev">
+              {[...allTech].reverse().concat([...allTech].reverse()).slice(0, 28).map((t, i) => (
+                <TechPill key={`b${i}`} tech={t} />
+              ))}
+            </div>
+          </div>
+          {/* Row → slow */}
+          <div className="flex overflow-hidden mask-[linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]">
+            <div className="flex gap-2 whitespace-nowrap marquee-track-slow">
+              {allTech.concat(allTech).slice(4, 30).map((t, i) => (
+                <TechPill key={`c${i}`} tech={t} />
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
   );
 }
-

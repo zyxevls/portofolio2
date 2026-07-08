@@ -1,8 +1,7 @@
-import { useRef } from "react";
-import { motion, useInView } from "framer-motion";
-import { Card, CardDescription, CardTitle } from "@/components/ui/card";
+import { useRef, useEffect } from "react";
 import { CountUpNumber } from "@/components/shared/CountUpNumber";
 import { useLanguage } from "@/providers/language-provider";
+import { staggerReveal } from "@/lib/gsap-utils";
 
 interface StatsProps {
   startStatsCount: boolean;
@@ -10,72 +9,38 @@ interface StatsProps {
 
 export function Stats({ startStatsCount }: StatsProps) {
   const { content } = useLanguage();
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const containerRef = useRef<HTMLDivElement>(null);
+  const itemRefs     = useRef<(HTMLDivElement | null)[]>([]);
 
-  const handleCardPointerMove = (event: React.MouseEvent<HTMLDivElement>) => {
-    const rect = event.currentTarget.getBoundingClientRect();
-    event.currentTarget.style.setProperty("--mx", `${event.clientX - rect.left}px`);
-    event.currentTarget.style.setProperty("--my", `${event.clientY - rect.top}px`);
-  };
-
-  const handleCardPointerEnter = (event: React.MouseEvent<HTMLDivElement>) => {
-    const rect = event.currentTarget.getBoundingClientRect();
-    event.currentTarget.style.setProperty("--mx", `${event.clientX - rect.left}px`);
-    event.currentTarget.style.setProperty("--my", `${event.clientY - rect.top}px`);
-  };
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-      },
-    },
-  };
-
-  const cardVariants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: { 
-      opacity: 1, 
-      y: 0,
-      transition: { 
-        duration: 0.8, 
-        ease: [0.21, 0.47, 0.32, 0.98] 
-      }
-    },
-  };
+  useEffect(() => {
+    const kill = staggerReveal(itemRefs.current, {
+      trigger: containerRef.current,
+      stagger: 0.08,
+      y: 14,
+      duration: 0.5,
+    });
+    return kill;
+  }, []);
 
   return (
-    <motion.div
-      ref={ref}
-      variants={containerVariants}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, margin: "-100px" }}
-      className="col-span-full grid grid-cols-2 gap-4 md:gap-6 sm:grid-cols-4"
+    <div
+      ref={containerRef}
+      className="grid grid-cols-2 sm:grid-cols-4 border border-border"
     >
-      {content.stats.map((stat, index) => (
-        <motion.div 
-          key={stat.label} 
-          className="flex items-center gap-4 py-2"
+      {content.stats.map((stat, i) => (
+        <div
+          key={stat.label}
+          ref={(el) => { itemRefs.current[i] = el; }}
+          className="flex flex-col gap-1.5 px-6 py-7 border-r border-b border-border last:border-r-0 [&:nth-child(2)]:border-r-0 sm:[&:nth-child(2)]:border-r sm:[&:nth-child(4)]:border-r-0 [&:nth-child(3)]:border-b-0 [&:nth-child(4)]:border-b-0 [&:nth-child(1)]:sm:border-b-0 [&:nth-child(2)]:sm:border-b-0 hover:bg-secondary transition-colors duration-150"
         >
-          <div className="flex flex-col">
-            <div className="text-4xl md:text-5xl font-bold tracking-tighter text-foreground">
-              <CountUpNumber
-                value={stat.value}
-                delay={220 + index * 140}
-                start={startStatsCount && isInView}
-              />
-            </div>
+          <div className="text-3xl md:text-4xl font-display text-foreground tabular-nums">
+            <CountUpNumber value={stat.value} delay={100 + i * 90} start={startStatsCount} />
           </div>
-          <div className="h-8 w-px bg-border/40 hidden sm:block" />
-          <div className="text-[9px] md:text-xs font-semibold leading-tight text-muted-foreground uppercase tracking-[0.2em]">
+          <div className="text-[9px] font-mono text-muted-foreground uppercase tracking-[0.28em] leading-tight">
             {stat.label}
           </div>
-        </motion.div>
+        </div>
       ))}
-    </motion.div>
+    </div>
   );
 }

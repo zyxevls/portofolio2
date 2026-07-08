@@ -1,122 +1,120 @@
-import { motion } from "framer-motion";
-import { Badge } from "@/components/ui/badge";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { useEffect, useRef, useState } from "react";
 import { useLanguage } from "@/providers/language-provider";
 import { iconMap } from "@/lib/icon-map";
-
-const sophisticatedHover = {
-  whileHover: { y: -12, scale: 1.03, rotateX: 2 },
-  transition: { type: "spring", stiffness: 300, damping: 25, mass: 0.8 }
-} as const;
+import { gsap, ScrollTrigger, animateHeading, staggerReveal, parallaxY } from "@/lib/gsap-utils";
 
 export function Services() {
   const { content } = useLanguage();
+  const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
 
-  const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
-    const { currentTarget, clientX, clientY } = event;
-    const { left, top } = currentTarget.getBoundingClientRect();
-    const x = clientX - left;
-    const y = clientY - top;
-    currentTarget.style.setProperty("--x", `${x}px`);
-    currentTarget.style.setProperty("--y", `${y}px`);
-  };
+  const sectionRef  = useRef<HTMLElement>(null);
+  const gridRef     = useRef<HTMLDivElement>(null);
+  const headingRef  = useRef<HTMLHeadingElement>(null);
+  const rowRefs     = useRef<(HTMLDivElement | null)[]>([]);
+  const lineRef     = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+    const kills: (() => void)[] = [];
+
+    // Line scale-in
+    if (lineRef.current) {
+      gsap.set(lineRef.current, { scaleX: 0, transformOrigin: "left" });
+      const st = ScrollTrigger.create({
+        trigger: section,
+        start: "top 85%",
+        onEnter: () => gsap.to(lineRef.current, { scaleX: 1, duration: 0.8, ease: "power3.inOut" }),
+        once: true,
+      });
+      kills.push(() => st.kill());
+    }
+
+    kills.push(animateHeading(headingRef.current, { trigger: section }));
+    kills.push(staggerReveal(rowRefs.current, { trigger: section, stagger: 0.07, y: 16 }));
+    kills.push(parallaxY(gridRef.current, { yFactor: 0.2, trigger: section }));
+
+    return () => kills.forEach((k) => k());
+  }, []);
 
   return (
-    <section className="relative py-16">
-      {/* Decorative Background Elements */}
-      <div className="absolute top-0 left-1/4 -z-10 h-48 w-48 bg-primary/5 blur-[80px] rounded-full opacity-50" />
-      <div className="absolute bottom-0 right-1/4 -z-10 h-48 w-48 bg-secondary/5 blur-[80px] rounded-full opacity-50" />
+    <section ref={sectionRef} id="services" className="relative py-2 overflow-hidden">
+      {/* Subtle grid bg parallax */}
+      <div ref={gridRef} className="parallax-layer absolute inset-0 -z-10 grid-bg opacity-60" aria-hidden />
 
-      <div className="space-y-12">
-        <div className="flex flex-col items-center text-center space-y-4">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            className="px-3 py-0.5 rounded-full bg-primary/10 border border-primary/20 text-[9px] font-bold uppercase tracking-[0.3em] text-primary"
-          >
-            {content.common.myExpertise}
-          </motion.div>
-
-          <div className="space-y-2">
-            <motion.h2
-              initial={{ opacity: 0, y: 15 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="font-display text-4xl md:text-5xl font-bold tracking-tight leading-tight"
-            >
-              {content.common.myQualityServices.split(" ").slice(0, -1).join(" ")}{" "}
-              <span className="bg-linear-to-r from-primary to-cyan-500 bg-clip-text text-transparent">
-                {content.common.myQualityServices.split(" ").slice(-1)}
-              </span>
-            </motion.h2>
-
-            <motion.p
-              initial={{ opacity: 0, y: 15 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.1 }}
-              className="max-w-xl mx-auto text-sm md:text-base text-muted-foreground leading-relaxed"
-            >
-              {content.common.servicesDescription}
-            </motion.p>
-          </div>
-        </div>
-
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {content.services.map((service, index) => {
-            const Icon = iconMap[service.icon];
-
-            return (
-              <motion.div
-                key={service.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-50px" }}
-                transition={{ duration: 0.6, delay: index * 0.1, ease: [0.22, 1, 0.36, 1] }}
-                onMouseMove={handleMouseMove}
-                className="group h-full"
-              >
-                <div
-                  className="flex flex-col h-full rounded-4xl border border-border/40 bg-card/40 p-8 backdrop-blur-xl"
-                >
-                  <div className="relative z-10 flex h-full flex-col justify-between">
-                    <div>
-                      <div className="flex items-center justify-between mb-8">
-                        <div className="relative flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10 border border-primary/20 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-500 shadow-sm">
-                          <Icon className="size-6" />
-                        </div>
-                        <span className="text-5xl font-black text-foreground/5 dark:text-white/5 select-none tracking-tighter">
-                          {(index + 1).toString().padStart(2, '0')}
-                        </span>
-                      </div>
-
-                      <div className="space-y-4">
-                        <h3 className="text-2xl font-bold tracking-tight text-foreground group-hover:text-primary transition-colors duration-300">
-                          {service.title}
-                        </h3>
-                        <p className="text-sm leading-relaxed text-slate-600 dark:text-muted-foreground group-hover:text-foreground dark:group-hover:text-white/80 transition-colors duration-300">
-                          {service.description}
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="pt-8">
-                      <div className="inline-flex items-center gap-3 text-[11px] font-bold uppercase tracking-[0.2em] text-primary group-hover:gap-5 transition-all duration-300 cursor-pointer">
-                        {content.common.learnMore}
-                        <div className="h-px w-6 bg-primary group-hover:w-10 transition-all duration-300" />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-            );
-          })}
-        </div>
+      {/* Section label */}
+      <div className="flex items-center gap-4 pb-4 mb-14">
+        <div ref={lineRef} className="h-px flex-1 bg-border" />
+        <span className="text-[10px] font-mono text-muted-foreground uppercase tracking-[0.3em] shrink-0">
+          002 — {content.common.myExpertise}
+        </span>
       </div>
+
+      {/* Title row */}
+      <div className="flex items-end justify-between mb-10 gap-6">
+        <h2
+          ref={headingRef}
+          data-text={content.common.myQualityServices}
+          className="font-display text-4xl md:text-6xl leading-none tracking-tight text-foreground max-w-xl"
+        >
+          {content.common.myQualityServices}
+        </h2>
+        <p className="hidden md:block text-xs text-muted-foreground leading-relaxed max-w-52 text-right font-mono">
+          {content.common.servicesDescription}
+        </p>
+      </div>
+
+      {/* Services list rows */}
+      <div className="border-t border-border">
+        {content.services.map((service, i) => {
+          const Icon = iconMap[service.icon];
+          const isHovered = hoveredIdx === i;
+
+          return (
+            <div
+              key={service.title}
+              ref={(el) => { rowRefs.current[i] = el; }}
+              onMouseEnter={() => setHoveredIdx(i)}
+              onMouseLeave={() => setHoveredIdx(null)}
+              className="group grid grid-cols-[40px_1fr_auto] items-start gap-6 py-5 border-b border-border cursor-default transition-colors duration-150 hover:bg-secondary -mx-6 px-6"
+            >
+              {/* Index */}
+              <span className="text-[10px] font-mono text-muted-foreground pt-1">
+                {String(i + 1).padStart(2, "0")}
+              </span>
+
+              {/* Title + desc */}
+              <div>
+                <h3 className="font-display text-xl md:text-2xl text-foreground leading-tight group-hover:italic transition-all duration-150">
+                  {service.title}
+                </h3>
+                <div
+                  className="overflow-hidden transition-all duration-300"
+                  style={{ maxHeight: isHovered ? "72px" : "0px", opacity: isHovered ? 1 : 0 }}
+                >
+                  <p className="text-xs text-muted-foreground leading-relaxed pt-2 font-mono">
+                    {service.description}
+                  </p>
+                </div>
+              </div>
+
+              {/* Icon */}
+              <div className="flex items-center gap-2 mt-1">
+                <Icon className="size-4 text-muted-foreground group-hover:text-foreground transition-colors" />
+                {/* Expand indicator */}
+                <div
+                  className="w-4 h-px bg-muted-foreground transition-all duration-200 group-hover:w-6 group-hover:bg-foreground"
+                />
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Mobile desc */}
+      <p className="md:hidden mt-8 text-xs text-muted-foreground leading-relaxed font-mono">
+        {content.common.servicesDescription}
+      </p>
     </section>
   );
 }
-
-
-

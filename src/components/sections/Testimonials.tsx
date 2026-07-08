@@ -1,57 +1,35 @@
-import { motion } from "framer-motion";
+import { useEffect, useRef, useCallback, useState } from "react";
 import { useLanguage } from "@/providers/language-provider";
-import { Card } from "@/components/ui/card";
-import { useCallback, useEffect, useState } from "react";
-import { ChevronLeft, ChevronRight, Quote } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import useEmblaCarousel from "embla-carousel-react";
+import { gsap, ScrollTrigger, animateHeading, revealFade, parallaxY } from "@/lib/gsap-utils";
 
-function TestimonialCard({ testimonial }: { testimonial: any }) {
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const { currentTarget, clientX, clientY } = e;
-    const { left, top } = currentTarget.getBoundingClientRect();
-    currentTarget.style.setProperty("--mx", `${clientX - left}px`);
-    currentTarget.style.setProperty("--my", `${clientY - top}px`);
-  };
-
+function TestimonialCard({ t, idx }: { t: { quote: string; author: string; role: string }; idx: number }) {
   return (
-    <div className="flex-[0_0_100%] md:flex-[0_0_50%] lg:flex-[0_0_33.333%] min-w-0 px-3">
-      <Card
-        className="group relative h-full lux-card bg-card/60 dark:bg-white/3 border border-border/50 dark:border-white/10 backdrop-blur-xl p-6 flex flex-col justify-between overflow-hidden rounded-4xl shadow-xl transition-all duration-500 hover:border-primary/30"
-        onMouseMove={handleMouseMove}
-        onMouseEnter={handleMouseMove}
-      >
-        <div
-          className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10"
-          style={{
-            background: `radial-gradient(400px circle at var(--mx, 0) var(--my, 0), rgba(var(--primary-rgb), 0.15), transparent 80%)`
-          }}
-        />
-
-        <div className="relative z-10">
-          <Quote className="size-8 text-primary/20 mb-4 group-hover:text-primary/40 transition-colors" />
-          <p className="text-sm md:text-base font-semibold text-slate-700 dark:text-foreground group-hover:text-primary transition-colors leading-relaxed">
-            "{testimonial.quote}"
-          </p>
-        </div>
-
-        <div className="mt-8 flex items-center gap-4 pt-5 border-t border-border/50 dark:border-white/5">
-          <div className="h-11 w-11 rounded-full border-2 border-primary/20 p-0.5 group-hover:border-primary transition-colors">
+    <div className="flex-[0_0_100%] md:flex-[0_0_50%] lg:flex-[0_0_33.333%] min-w-0 pr-px">
+      <div className="flex flex-col h-full border border-border bg-background p-7 hover:bg-secondary transition-colors duration-200 group">
+        {/* Quote number */}
+        <span className="text-[10px] font-mono text-muted-foreground mb-5 block">
+          {String(idx + 1).padStart(2, "0")}
+        </span>
+        <p className="flex-1 text-[13px] text-foreground leading-[1.9] mb-8">
+          &ldquo;{t.quote}&rdquo;
+        </p>
+        <div className="flex items-center gap-3 pt-5 border-t border-border">
+          <div className="h-8 w-8 border border-border overflow-hidden bg-secondary shrink-0">
             <img
-              src={`https://i.pravatar.cc/150?u=${testimonial.author}`}
-              alt={testimonial.author}
-              className="h-full w-full object-cover rounded-full bg-secondary"
+              src={`https://i.pravatar.cc/80?u=${t.author}`}
+              alt={t.author}
+              className="h-full w-full object-cover grayscale"
+              loading="lazy"
             />
           </div>
           <div>
-            <h4 className="font-bold text-sm text-foreground group-hover:text-(--hover-text) transition-colors">
-              {testimonial.author}
-            </h4>
-            <p className="text-[10px] text-muted-foreground group-hover:text-(--hover-text)/70 transition-colors uppercase tracking-wider font-semibold">
-              {testimonial.role}
-            </p>
+            <p className="text-xs font-medium text-foreground">{t.author}</p>
+            <p className="text-[10px] font-mono text-muted-foreground uppercase tracking-wider">{t.role}</p>
           </div>
         </div>
-      </Card>
+      </div>
     </div>
   );
 }
@@ -59,74 +37,112 @@ function TestimonialCard({ testimonial }: { testimonial: any }) {
 export function Testimonials() {
   const { content } = useLanguage();
   const { testimonials } = content;
+
+  const sectionRef  = useRef<HTMLElement>(null);
+  const gridRef     = useRef<HTMLDivElement>(null);
+  const headingRef  = useRef<HTMLHeadingElement>(null);
+  const wrapRef     = useRef<HTMLDivElement>(null);
+  const lineRef     = useRef<HTMLDivElement>(null);
+
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, align: "start" });
   const [selectedIndex, setSelectedIndex] = useState(0);
 
-  const scrollPrev = useCallback(() => emblaApi && emblaApi.scrollPrev(), [emblaApi]);
-  const scrollNext = useCallback(() => emblaApi && emblaApi.scrollNext(), [emblaApi]);
-
-  const onSelect = useCallback(() => {
-    if (!emblaApi) return;
-    setSelectedIndex(emblaApi.selectedScrollSnap());
+  const scrollPrev = useCallback(() => emblaApi?.scrollPrev(), [emblaApi]);
+  const scrollNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi]);
+  const onSelect   = useCallback(() => {
+    if (emblaApi) setSelectedIndex(emblaApi.selectedScrollSnap());
   }, [emblaApi]);
 
   useEffect(() => {
     if (!emblaApi) return;
     onSelect();
     emblaApi.on("select", onSelect);
+    return () => { emblaApi.off("select", onSelect); };
   }, [emblaApi, onSelect]);
 
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+    const kills: (() => void)[] = [];
+
+    if (lineRef.current) {
+      gsap.set(lineRef.current, { scaleX: 0, transformOrigin: "left" });
+      const st = ScrollTrigger.create({
+        trigger: section,
+        start: "top 85%",
+        onEnter: () => gsap.to(lineRef.current, { scaleX: 1, duration: 0.8, ease: "power3.inOut" }),
+        once: true,
+      });
+      kills.push(() => st.kill());
+    }
+
+    kills.push(animateHeading(headingRef.current, { trigger: section }));
+    kills.push(revealFade(wrapRef.current, { trigger: section, delay: 0.2 }));
+    kills.push(parallaxY(gridRef.current, { yFactor: 0.15, trigger: section }));
+
+    return () => kills.forEach((k) => k());
+  }, []);
+
   return (
-    <section className="relative py-20 overflow-hidden">
-      <div className="container mx-auto px-6 max-w-6xl">
-        <div className="flex items-center justify-between gap-6 mb-12">
-          <div className="flex flex-col gap-2">
-            <div className="flex items-center gap-2 text-primary font-bold uppercase tracking-[0.2em] text-[9px]">
-              <span className="h-px w-6 bg-primary/40" />
-              {content.common.myTestimonials}
-            </div>
-            <h2 className="font-display text-3xl md:text-4xl font-bold tracking-tight text-foreground">
-              {content.common.clientFeedback.split(" ").slice(0, -1).join(" ")}{" "}
-              <span className="text-primary italic font-serif">
-                {content.common.clientFeedback.split(" ").slice(-1)}
-              </span>
-            </h2>
-          </div>
+    <section ref={sectionRef} id="testimonials" className="relative py-2 overflow-hidden">
+      {/* Parallax grid */}
+      <div ref={gridRef} className="parallax-layer absolute inset-0 -z-10 grid-bg opacity-60" aria-hidden />
 
-          <div className="flex items-center gap-2">
-            <button
-              onClick={scrollPrev}
-              className="h-10 w-10 rounded-full border border-border/50 dark:border-white/10 flex items-center justify-center text-muted-foreground hover:bg-primary hover:text-white transition-all bg-card/40 dark:bg-transparent"
-            >
-              <ChevronLeft className="size-5" />
-            </button>
-            <button
-              onClick={scrollNext}
-              className="h-10 w-10 rounded-full border border-border/50 dark:border-white/10 flex items-center justify-center text-muted-foreground hover:bg-primary hover:text-white transition-all bg-card/40 dark:bg-transparent"
-            >
-              <ChevronRight className="size-5" />
-            </button>
-          </div>
+      {/* Section label */}
+      <div className="flex items-center gap-4 pb-4 mb-14">
+        <div ref={lineRef} className="h-px flex-1 bg-border" />
+        <span className="text-[10px] font-mono text-muted-foreground uppercase tracking-[0.3em] shrink-0">
+          005 — {content.common.myTestimonials}
+        </span>
+      </div>
+
+      <div className="flex items-end justify-between gap-6 mb-10">
+        <h2
+          ref={headingRef}
+          data-text={content.common.clientFeedback}
+          className="font-display text-4xl md:text-5xl leading-tight text-foreground"
+        >
+          {content.common.clientFeedback}
+        </h2>
+
+        <div className="flex items-center gap-px shrink-0">
+          <button
+            onClick={scrollPrev}
+            aria-label="Previous"
+            className="h-10 w-10 border border-border flex items-center justify-center hover:bg-foreground hover:text-background hover:border-foreground transition-all duration-150"
+          >
+            <ChevronLeft className="size-4" />
+          </button>
+          <button
+            onClick={scrollNext}
+            aria-label="Next"
+            className="h-10 w-10 border border-border flex items-center justify-center hover:bg-foreground hover:text-background hover:border-foreground transition-all duration-150"
+          >
+            <ChevronRight className="size-4" />
+          </button>
         </div>
+      </div>
 
-        <div className="overflow-hidden" ref={emblaRef}>
-          <div className="flex -ml-3">
-            {testimonials.map((testimonial, i) => (
-              <TestimonialCard key={i} testimonial={testimonial} />
+      <div ref={wrapRef}>
+        <div className="overflow-hidden border-t border-border" ref={emblaRef}>
+          <div className="flex gap-px bg-border">
+            {testimonials.map((t, i) => (
+              <TestimonialCard key={i} t={t} idx={i} />
             ))}
           </div>
         </div>
+      </div>
 
-        <div className="flex justify-center gap-2 mt-10">
-          {testimonials.map((_, i) => (
-            <button
-              key={i}
-              onClick={() => emblaApi?.scrollTo(i)}
-              className={`h-1 rounded-full transition-all duration-300 ${i === selectedIndex ? "w-8 bg-primary" : "w-2 bg-muted dark:bg-white/10"
-                }`}
-            />
-          ))}
-        </div>
+      {/* Dot nav */}
+      <div className="flex gap-1 mt-6">
+        {testimonials.map((_, i) => (
+          <button
+            key={i}
+            onClick={() => emblaApi?.scrollTo(i)}
+            aria-label={`Slide ${i + 1}`}
+            className={`h-px transition-all duration-300 ${i === selectedIndex ? "w-10 bg-foreground" : "w-5 bg-border hover:bg-muted-foreground"}`}
+          />
+        ))}
       </div>
     </section>
   );
