@@ -60,7 +60,7 @@ portofolio2/
 
 ### Prasyarat
 
-- [Node.js](https://nodejs.org) v18 atau lebih baru
+- [Node.js](https://nodejs.org) v20.19 atau lebih baru
 - npm (sudah termasuk bersama Node.js)
 
 ### Langkah-langkah
