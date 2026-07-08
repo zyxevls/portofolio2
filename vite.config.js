@@ -3,7 +3,6 @@ import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import path from 'path'
 
-// https://vite.dev/config/
 export default defineConfig({
   plugins: [
     react(),
@@ -19,6 +18,28 @@ export default defineConfig({
     port: 5173,
     watch: {
       usePolling: true,
+    },
+  },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          // React core — loaded first, cached longest
+          'vendor-react': ['react', 'react-dom'],
+          // Animation libs — separate so sections don't bloat main chunk
+          'vendor-gsap': ['gsap'],
+          'vendor-motion': ['framer-motion'],
+          // UI utilities
+          'vendor-ui': [
+            'class-variance-authority',
+            'clsx',
+            'tailwind-merge',
+            'lucide-react',
+          ],
+          // next-themes is small but keep separate from runtime
+          'vendor-themes': ['next-themes'],
+        },
+      },
     },
   },
 })

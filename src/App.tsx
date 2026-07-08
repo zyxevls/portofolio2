@@ -1,125 +1,117 @@
-import { useEffect, useState, Suspense, lazy } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { useEffect, useState, Suspense, lazy, useRef } from "react";
 
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { CustomCursor } from "@/components/shared/CustomCursor";
-
-import { Separator } from "@/components/ui/separator";
 import { ThemeToggle } from "@/components/theme-toggle";
-
-import logoDark from "@/assets/logo-dark.png";
-
-// Lazy load sections for better performance
 import { Hero } from "@/components/sections/Hero";
-const TechStack = lazy(() => import("@/components/sections/TechStack").then(m => ({ default: m.TechStack })));
+import { gsap } from "@/lib/gsap-utils";
+
 const Services = lazy(() => import("@/components/sections/Services").then(m => ({ default: m.Services })));
-const Workflow = lazy(() => import("@/components/sections/Workflow").then(m => ({ default: m.Workflow })));
+const TechStack = lazy(() => import("@/components/sections/TechStack").then(m => ({ default: m.TechStack })));
 const Testimonials = lazy(() => import("@/components/sections/Testimonials").then(m => ({ default: m.Testimonials })));
 const Projects = lazy(() => import("@/components/sections/Projects").then(m => ({ default: m.Projects })));
-const Stats = lazy(() => import("@/components/sections/Stats").then(m => ({ default: m.Stats })));
 const CallToAction = lazy(() => import("@/components/sections/CallToAction").then(m => ({ default: m.CallToAction })));
 const Contact = lazy(() => import("@/components/sections/Contact").then(m => ({ default: m.Contact })));
 
-export default function App() {
-    const [showIntroLoader, setShowIntroLoader] = useState(true);
-    const [startStatsCount, setStartStatsCount] = useState(false);
-    const [isScrolled, setIsScrolled] = useState(false);
+export default function App()
+{
+  const [showLoader, setShowLoader] = useState(true);
+  const [startStatsCount, setStartStats] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
 
-    useEffect(() => {
-        const timer = window.setTimeout(() => {
-            setShowIntroLoader(false);
-        }, 800);
-        return () => window.clearTimeout(timer);
-    }, []);
+  const loaderRef = useRef<HTMLDivElement>(null);
+  const barRef = useRef<HTMLDivElement>(null);
+  const loaderTextRef = useRef<HTMLParagraphElement>(null);
 
-    useEffect(() => {
-        if (!showIntroLoader) {
-            setStartStatsCount(true);
-        }
-    }, [showIntroLoader]);
+  /* ── Intro loader ── */
+  useEffect(() =>
+  {
+    const el = loaderRef.current;
+    if (!el) return;
 
-    useEffect(() => {
-        const onScroll = () => {
-            setIsScrolled(window.scrollY > 30);
-        };
-        window.addEventListener("scroll", onScroll, { passive: true });
-        onScroll();
-        return () => window.removeEventListener("scroll", onScroll);
-    }, []);
+    const tl = gsap.timeline();
 
-    return (
-        <div className="bg-background text-foreground selection:bg-primary selection:text-primary-foreground">
-            <CustomCursor />
+    // Text fade in
+    if (loaderTextRef.current) {
+      tl.fromTo(loaderTextRef.current, { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power2.out" }, 0);
+    }
 
-            <AnimatePresence>
-                {showIntroLoader && (
-                    <motion.div
-                        initial={{ opacity: 1 }}
-                        exit={{ opacity: 0, transition: { duration: 0.45, ease: "easeOut" } }}
-                        className="fixed inset-0 z-70 flex flex-col items-center justify-center bg-background"
-                    >
-                        <div className="absolute inset-0 opacity-80 [background:radial-gradient(circle_at_18%_14%,rgba(249,115,22,0.17),transparent_30%),radial-gradient(circle_at_82%_0%,rgba(15,118,110,0.2),transparent_30%)]" />
-                        <div className="relative mx-auto flex flex-col items-center px-6">
-                            <motion.p
-                                initial={{ opacity: 0, y: 12 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.45 }}
-                                className="text-sm tracking-[0.28em] text-muted-foreground uppercase"
-                            >
-                                Muhamad Jaelani
-                            </motion.p>
-                            <motion.div
-                                initial={{ scale: 0.8, opacity: 0 }}
-                                animate={{ scale: 1, opacity: 1 }}
-                                transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-                                className="relative h-20 w-auto mb-6"
-                            >
-                                <img
-                                    src={logoDark}
-                                    alt="Logo"
-                                    className="h-full w-auto object-contain brightness-110 drop-shadow-[0_0_15px_rgba(255,255,255,0.2)]"
-                                />
-                            </motion.div>
+    // Bar fill
+    if (barRef.current) {
+      tl.fromTo(barRef.current, { scaleX: 0 }, { scaleX: 1, duration: 0.8, ease: "power2.inOut" }, 0.1);
+    }
 
-                            <div className="mt-10 h-1 w-64 overflow-hidden rounded-full bg-secondary/80">
-                                <motion.div
-                                    initial={{ x: "-100%" }}
-                                    animate={{ x: "0%" }}
-                                    transition={{ duration: 1.2, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-                                    className="h-full bg-linear-to-r from-primary via-cyan-400 to-orange-400"
-                                />
-                            </div>
-                        </div>
-                    </motion.div>
-                )}
-            </AnimatePresence>
+    // Fade out loader
+    tl.to(el, {
+      opacity: 0,
+      duration: 0.3,
+      ease: "power2.in",
+      delay: 0.1,
+      onComplete: () =>
+      {
+        setShowLoader(false);
+        setStartStats(true);
+      },
+    });
 
-            <Header isScrolled={isScrolled} />
+    return () => { tl.kill(); };
+  }, []);
 
-            <motion.div
-                className="fixed right-0 top-1/2 z-40 -translate-y-1/2"
-                animate={{ x: [0, -2, 0] }}
-                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-            >
-                <ThemeToggle className="shadow-2xl" />
-            </motion.div>
+  /* ── Scroll state ── */
+  useEffect(() =>
+  {
+    const onScroll = () => setIsScrolled(window.scrollY > 10);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
-            <main className="relative z-10 mx-auto flex w-full max-w-6xl flex-col gap-24 px-6 pb-20 md:gap-20 top-20">
-                <Suspense fallback={<div className="h-96 flex items-center justify-center">Loading experience...</div>}>
-                    <Hero startStatsCount={startStatsCount} />
-                    <Separator />
-                    <Services />
-                    <Workflow />
-                    <TechStack />
-                    <Testimonials />
-                    <Projects />
-                    <CallToAction />
-                    <Contact />
-                </Suspense>
-            </main>
+  return (
+    <div className="noise bg-background text-foreground selection:bg-foreground selection:text-background">
+      <CustomCursor />
 
-            <Footer />
+      {/* ── Minimal intro loader ── */}
+      {showLoader && (
+        <div
+          ref={loaderRef}
+          className="fixed inset-0 z-70 flex items-end justify-end p-10 bg-background pointer-events-none grid-bg"
+        >
+          <div className="flex flex-col items-end gap-3">
+            <p ref={loaderTextRef} className="text-[10px] font-mono text-muted-foreground uppercase tracking-[0.3em]">
+              Muhamad Jaelani
+            </p>
+            <div className="h-px w-40 bg-border overflow-hidden">
+              <div
+                ref={barRef}
+                className="h-full w-full origin-left bg-foreground"
+                style={{ transform: "scaleX(0)" }}
+              />
+            </div>
+          </div>
         </div>
-    );
+      )}
+
+      <Header isScrolled={isScrolled} />
+
+      {/* Floating theme toggle */}
+      <div className="fixed right-0 top-1/2 z-40 -translate-y-1/2">
+        <ThemeToggle className="shadow-sm" />
+      </div>
+
+      <main className="mx-auto max-w-6xl px-6 flex flex-col gap-32 pb-0">
+        <Suspense fallback={null}>
+          <Hero startStatsCount={startStatsCount} />
+          <Services />
+          <TechStack />
+          <Testimonials />
+          <Projects />
+          <CallToAction />
+          <Contact />
+        </Suspense>
+      </main>
+
+      <Footer />
+    </div>
+  );
 }
